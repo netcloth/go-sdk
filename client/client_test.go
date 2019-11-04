@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	baseUrl     = "http://xxxxx"
-	nodeUrl     = "tcp://127.0.0.1:25557"
+	baseUrl     = "http://127.0.0.1:1317"
+	nodeUrl     = "tcp://127.0.0.1:26657"
 	networkType = types.Alphanet
 	km          keys.KeyManager
 )
@@ -29,7 +29,7 @@ func TestNewNCHClient(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	} else {
-		if res, err := c.QueryAccount("faa1282eufkw9qgm55symgqqg38nremslvggpylkht"); err != nil {
+		if res, err := c.QueryAccount("nch1p3fuppcxud5rjsaywuyuguh6achmj5p0r6z6ve"); err != nil {
 			t.Fatal(err)
 		} else {
 			t.Log(util.ToJsonIgnoreErr(res))

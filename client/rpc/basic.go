@@ -2,6 +2,7 @@ package rpc
 
 import (
 	itypes "github.com/NetCloth/go-sdk/client/types"
+
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	"github.com/tendermint/tendermint/types"

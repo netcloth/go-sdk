@@ -11,7 +11,7 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	c = NewClient("tcp://127.0.0.1:25557")
+	c = NewClient("tcp://127.0.0.1:26657")
 	m.Run()
 }
 
