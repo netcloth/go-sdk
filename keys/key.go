@@ -5,12 +5,15 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/pkg/errors"
+
 	"github.com/NetCloth/netcloth-chain/modules/auth"
 	"github.com/NetCloth/netcloth-chain/types"
 	ctypes "github.com/NetCloth/netcloth-chain/types"
 
 	"github.com/NetCloth/go-sdk/types/tx"
 
+	"github.com/NetCloth/netcloth-chain/crypto/keys/mintkey"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 )
@@ -93,8 +96,35 @@ func (k *keyManager) recoveryFromKeyStore(keystoreFile string, auth string) erro
 	return nil
 }
 
+func (k *keyManager) ImportKeystore(keystoreFile string, passphrase string) error {
+	if passphrase == "" {
+		return fmt.Errorf("Password is missing ")
+	}
+
+	armor, err := ioutil.ReadFile(keystoreFile)
+	if err != nil {
+		return err
+	}
+
+	privKey, err := mintkey.UnarmorDecryptPrivKey(string(armor), passphrase)
+	if err != nil {
+		return errors.Wrap(err, "couldn't import private key")
+	}
+
+	addr := ctypes.AccAddress(privKey.PubKey().Address())
+	k.addr = addr
+	k.privKey = privKey
+	return nil
+}
+
 func NewKeyStoreKeyManager(file string, auth string) (KeyManager, error) {
 	k := keyManager{}
 	err := k.recoveryFromKeyStore(file, auth)
+	return &k, err
+}
+
+func NewKeystoreByImportKeystore(file string, auth string) (KeyManager, error) {
+	k := keyManager{}
+	err := k.ImportKeystore(file, auth)
 	return &k, err
 }
