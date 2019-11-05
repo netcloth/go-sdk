@@ -6,6 +6,7 @@ import (
 
 type LiteClient interface {
 	QueryAccount(address string) (AccountInfo, error)
+	QueryIPAL(address string) (IPALObj, error)
 }
 
 type client struct {

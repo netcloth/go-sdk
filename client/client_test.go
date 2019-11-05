@@ -29,7 +29,15 @@ func TestNewNCHClient(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	} else {
-		if res, err := c.QueryAccount("nch1p3fuppcxud5rjsaywuyuguh6achmj5p0r6z6ve"); err != nil {
+		// query account
+		if res, err := c.QueryAccount("nch1ue8f3uzdwv9mhyvppucepz6zwpquqpzz9untnm"); err != nil {
+			t.Fatal(err)
+		} else {
+			t.Log(util.ToJsonIgnoreErr(res))
+		}
+
+		// query ipal
+		if res, err := c.QueryIPAL("nch18q4pv9qvmqx7dcd2jq3dl3d0755urk835w2ak4"); err != nil {
 			t.Fatal(err)
 		} else {
 			t.Log(util.ToJsonIgnoreErr(res))

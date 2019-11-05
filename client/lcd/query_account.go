@@ -13,6 +13,11 @@ type (
 		Value AccountInfoValue `json:"value"`
 	}
 
+	IPALObj struct {
+		Address string `json:"user_address"`
+		IP      string `json:"ip"`
+	}
+
 	AccountInfoValue struct {
 		AccountNumber string       `json:"account_number"`
 		Address       string       `json:"address"`
@@ -37,3 +42,23 @@ func (c *client) QueryAccount(address string) (AccountInfo, error) {
 		}
 	}
 }
+
+func (c *client) QueryIPAL(address string) (IPALObj, error) {
+	var (
+		ipalObj IPALObj
+	)
+	path := fmt.Sprintf(UriQueryIPAL, address)
+	fmt.Println(path)
+
+	if _, body, err := c.httpClient.Get(path, nil); err != nil {
+		return ipalObj, err
+	} else {
+		if err := json.Unmarshal(body, &ipalObj); err != nil {
+			return ipalObj, err
+		} else {
+			return ipalObj, nil
+		}
+	}
+}
+
+func (c *client) QueryAIPALList()

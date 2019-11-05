@@ -27,7 +27,7 @@ func TestMain(m *testing.M) {
 	lite := lcd.NewClient(basicClient)
 	rpcClient := rpc.NewClient("tcp://127.0.0.1:25567")
 
-	c, err = NewClient("nch-", commontypes.Alphanet, km, lite, rpcClient)
+	c, err = NewClient("nch-alphanet", commontypes.Alphanet, km, lite, rpcClient)
 	if err != nil {
 		panic(err)
 	}
@@ -45,7 +45,6 @@ func TestClient_SendToken(t *testing.T) {
 	}
 	memo := "send from NetCloth/go-sdk"
 	if res, err := c.SendToken(receiver, coins, memo, false); err != nil {
-		fmt.Println(res)
 		t.Fatal(err)
 	} else {
 		t.Log(util.ToJsonIgnoreErr(res))
