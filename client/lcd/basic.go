@@ -5,7 +5,7 @@ import (
 )
 
 type LiteClient interface {
-	QueryAccount(address string) (AccountInfo, error)
+	QueryAccount(address string) (AccountBody, error)
 	QueryIPAL(address string) (IPALObj, error)
 }
 

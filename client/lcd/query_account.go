@@ -8,6 +8,21 @@ import (
 )
 
 type (
+	AccountValue struct {
+		Address       string       `json:"address"`
+		Coins         []types.Coin `json:"coins"`
+		AccountNumber string       `json:"account_number"`
+		Sequence      string       `json:"sequence"`
+	}
+	AccountResult struct {
+		Type  string       `json:"type"`
+		Value AccountValue `json:"value"`
+	}
+
+	AccountBody struct {
+		Height string        `json:"height"`
+		Result AccountResult `json:"result"`
+	}
 	AccountInfo struct {
 		Type  string           `json:"type"`
 		Value AccountInfoValue `json:"value"`
@@ -26,10 +41,7 @@ type (
 	}
 )
 
-func (c *client) QueryAccount(address string) (AccountInfo, error) {
-	var (
-		accountInfo AccountInfo
-	)
+func (c *client) QueryAccount(address string) (accountInfo AccountBody, err error) {
 	path := fmt.Sprintf(UriQueryAccount, address)
 
 	if _, body, err := c.httpClient.Get(path, nil); err != nil {
@@ -61,4 +73,6 @@ func (c *client) QueryIPAL(address string) (IPALObj, error) {
 	}
 }
 
-func (c *client) QueryAIPALList()
+func (c *client) QueryAIPALList() string {
+	return ""
+}

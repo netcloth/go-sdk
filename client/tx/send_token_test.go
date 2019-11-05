@@ -1,8 +1,6 @@
 package tx
 
 import (
-	"fmt"
-	"math"
 	"testing"
 
 	"github.com/NetCloth/go-sdk/client/basic"
@@ -15,19 +13,19 @@ import (
 )
 
 var (
-	c TxClient
+//c TxClient
 )
 
 func TestMain(m *testing.M) {
-	km, err := keys.NewKeyStoreKeyManager("./ks_1234567890.json", "1234567890")
+	km, err := keys.NewKeystoreByImportKeystore("./ks_12345678.txt", "12345678")
 	if err != nil {
 		panic(err)
 	}
 	basicClient := basic.NewClient("http://127.0.0.1:1317")
 	lite := lcd.NewClient(basicClient)
-	rpcClient := rpc.NewClient("tcp://127.0.0.1:25567")
+	rpcClient := rpc.NewClient("tcp://127.0.0.1:26657")
 
-	c, err = NewClient("nch-alphanet", commontypes.Alphanet, km, lite, rpcClient)
+	_, err = NewClient("nch-prinet-sky", commontypes.Alphanet, km, lite, rpcClient)
 	if err != nil {
 		panic(err)
 	}
@@ -35,16 +33,27 @@ func TestMain(m *testing.M) {
 }
 
 func TestClient_SendToken(t *testing.T) {
-	receiver := "nch1p3fuppcxud5rjsaywuyuguh6achmj5p0r6z6ve"
-	amount := fmt.Sprintf("%.0f", 0.12*math.Pow10(18))
+
+	km, err := keys.NewKeystoreByImportKeystore("./ks_12345678.txt", "12345678")
+	if err != nil {
+		panic(err)
+	}
+	basicClient := basic.NewClient("http://127.0.0.1:1317")
+	lite := lcd.NewClient(basicClient)
+	rpcClient := rpc.NewClient("tcp://127.0.0.1:26657")
+
+	c, err := NewClient("nch-prinet-sky", commontypes.Alphanet, km, lite, rpcClient)
+
+	receiver := "nch1dtpryue8ptzjjm32fwr0a7u5qg6wz02hhnpa30"
+	//amount := fmt.Sprintf("%.0f", 0.12*math.Pow10(18))
 	coins := []types.Coin{
 		{
 			Denom:  "unch",
-			Amount: amount,
+			Amount: "100",
 		},
 	}
-	memo := "send from NetCloth/go-sdk"
-	if res, err := c.SendToken(receiver, coins, memo, false); err != nil {
+	//memo := "send from NetCloth/go-sdk"
+	if res, err := c.SendToken(receiver, coins, "", false); err != nil {
 		t.Fatal(err)
 	} else {
 		t.Log(util.ToJsonIgnoreErr(res))

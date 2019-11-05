@@ -5,10 +5,10 @@ const (
 	TxBroadcastTypeAsync  = "async"
 	TxBroadcastTypeCommit = "commit"
 
-	TxDefaultGas       = 100000
-	TxDefaultFeeAmount = 600000000000000000
+	TxDefaultGas       = 200000
+	TxDefaultFeeAmount = 0
 	TxDefaultFeeDenom  = "unch"
 
 	NetworkTypeMainnet  = "mainnet"
-	NetworkTypeAlphanet = "alphanet"
+	NetworkTypeAlphanet = "nch-alphanet"
 )

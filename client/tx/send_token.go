@@ -2,6 +2,7 @@ package tx
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/NetCloth/netcloth-chain/modules/auth"
 	"github.com/NetCloth/netcloth-chain/modules/bank"
@@ -9,7 +10,6 @@ import (
 
 	"github.com/NetCloth/go-sdk/client/types"
 	"github.com/NetCloth/go-sdk/types/tx"
-	"github.com/NetCloth/go-sdk/util"
 	"github.com/NetCloth/go-sdk/util/constant"
 )
 
@@ -30,13 +30,13 @@ func (c *client) SendToken(receiver string, coins []types.Coin, memo string, com
 	}
 	msg := buildBankSendMsg(from, to, sdkCoins)
 
-	account, err := c.liteClient.QueryAccount(from.String())
+	accountBody, err := c.liteClient.QueryAccount(from.String())
 	if err != nil {
 		return result, err
 	}
 
 	//  check balance is enough
-	amount := getCoin(account.Value.Coins, constant.TxDefaultFeeDenom)
+	amount := getCoin(accountBody.Result.Value.Coins, constant.TxDefaultFeeDenom)
 
 	totalfee := sdk.NewInt(constant.TxDefaultFeeAmount)
 	for _, val := range sdkCoins {
@@ -55,10 +55,12 @@ func (c *client) SendToken(receiver string, coins []types.Coin, memo string, com
 			Amount: sdk.NewInt(constant.TxDefaultFeeAmount),
 		},
 	}
+	an, err := strconv.Atoi(accountBody.Result.Value.AccountNumber)
+	s, err := strconv.Atoi(accountBody.Result.Value.Sequence)
 	stdSignMsg := tx.StdSignMsg{
 		ChainID:       c.chainId,
-		AccountNumber: uint64(util.StrToInt64IgnoreErr(account.Value.AccountNumber)),
-		Sequence:      uint64(util.StrToInt64IgnoreErr(account.Value.Sequence)),
+		AccountNumber: uint64(an),
+		Sequence:      uint64(s),
 		Fee:           auth.NewStdFee(constant.TxDefaultGas, fee),
 		Msgs:          []sdk.Msg{msg},
 		Memo:          memo,
@@ -125,6 +127,10 @@ func getCoin(icoins []types.Coin, denom string) sdk.Coin {
 
 // buildBankSendMsg builds the sending coins msg
 func buildBankSendMsg(from sdk.AccAddress, to sdk.AccAddress, coins sdk.Coins) bank.MsgSend {
-	msg := bank.NewMsgSend(from, to, coins)
+	msg := bank.MsgSend{
+		FromAddress: from,
+		ToAddress:   to,
+		Amount:      coins,
+	}
 	return msg
 }
