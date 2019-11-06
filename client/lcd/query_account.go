@@ -14,6 +14,7 @@ type (
 		AccountNumber string       `json:"account_number"`
 		Sequence      string       `json:"sequence"`
 	}
+
 	AccountResult struct {
 		Type  string       `json:"type"`
 		Value AccountValue `json:"value"`
@@ -22,22 +23,6 @@ type (
 	AccountBody struct {
 		Height string        `json:"height"`
 		Result AccountResult `json:"result"`
-	}
-	AccountInfo struct {
-		Type  string           `json:"type"`
-		Value AccountInfoValue `json:"value"`
-	}
-
-	IPALObj struct {
-		Address string `json:"user_address"`
-		IP      string `json:"ip"`
-	}
-
-	AccountInfoValue struct {
-		AccountNumber string       `json:"account_number"`
-		Address       string       `json:"address"`
-		Sequence      string       `json:"sequence"`
-		Coins         []types.Coin `json:"coins"`
 	}
 )
 
@@ -53,26 +38,4 @@ func (c *client) QueryAccount(address string) (accountInfo AccountBody, err erro
 			return accountInfo, nil
 		}
 	}
-}
-
-func (c *client) QueryIPAL(address string) (IPALObj, error) {
-	var (
-		ipalObj IPALObj
-	)
-	path := fmt.Sprintf(UriQueryIPAL, address)
-	fmt.Println(path)
-
-	if _, body, err := c.httpClient.Get(path, nil); err != nil {
-		return ipalObj, err
-	} else {
-		if err := json.Unmarshal(body, &ipalObj); err != nil {
-			return ipalObj, err
-		} else {
-			return ipalObj, nil
-		}
-	}
-}
-
-func (c *client) QueryAIPALList() string {
-	return ""
 }

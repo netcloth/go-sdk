@@ -2,6 +2,7 @@ package lcd
 
 const (
 	UriQueryAccount   = "/auth/accounts/%s"
-	UriQueryIPAL      = "/ipal/ipal/%s"
+	UriQueryCIPAL     = "/ipal/ipal/%s"
+	UriQueryAIPAL     = "/aipal/node/%s"
 	UriQueryAIPALList = "/aipal/list"
 )
