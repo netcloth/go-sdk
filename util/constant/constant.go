@@ -7,7 +7,7 @@ const (
 
 	TxDefaultGas       = 200000
 	TxDefaultFeeAmount = 0
-	TxDefaultFeeDenom  = "unch"
+	TxDefaultDenom     = "unch"
 
 	NetworkTypeMainnet  = "mainnet"
 	NetworkTypeAlphanet = "nch-alphanet"

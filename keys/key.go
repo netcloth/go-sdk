@@ -20,6 +20,7 @@ import (
 
 type KeyManager interface {
 	Sign(msg tx.StdSignMsg) ([]byte, error)
+	SignBytes(msg []byte) ([]byte, error)
 	GetPrivKey() crypto.PrivKey
 	GetAddr() types.AccAddress
 }
@@ -43,6 +44,10 @@ func (k *keyManager) Sign(msg tx.StdSignMsg) ([]byte, error) {
 	}
 
 	return bz, nil
+}
+
+func (k *keyManager) SignBytes(msg []byte) ([]byte, error) {
+	return k.privKey.Sign(msg)
 }
 
 func (k *keyManager) GetPrivKey() crypto.PrivKey {

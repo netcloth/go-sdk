@@ -1,9 +1,9 @@
 package types
 
 import (
-	"github.com/NetCloth/netcloth-chain/modules/aipal"
 	"github.com/NetCloth/netcloth-chain/modules/auth"
 	"github.com/NetCloth/netcloth-chain/modules/bank"
+	"github.com/NetCloth/netcloth-chain/modules/cipal"
 	"github.com/NetCloth/netcloth-chain/modules/ipal"
 )
 
@@ -17,7 +17,7 @@ const (
 
 type (
 	MsgSend             = bank.MsgSend
-	MsgServiceNodeClaim = aipal.MsgServiceNodeClaim
-	MsgIPALClaim        = ipal.MsgIPALClaim
+	MsgServiceNodeClaim = ipal.MsgServiceNodeClaim
+	MsgIPALClaim        = cipal.MsgIPALClaim
 	StdFee              = auth.StdFee
 )

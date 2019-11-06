@@ -6,10 +6,15 @@ import (
 	"github.com/NetCloth/go-sdk/client/types"
 	"github.com/NetCloth/go-sdk/keys"
 	commontypes "github.com/NetCloth/go-sdk/types"
+	"github.com/NetCloth/netcloth-chain/modules/cipal"
+	"github.com/NetCloth/netcloth-chain/modules/ipal"
+	sdk "github.com/NetCloth/netcloth-chain/types"
 )
 
 type TxClient interface {
 	SendToken(receiver string, coins []types.Coin, memo string, commit bool) (types.BroadcastTxResult, error)
+	IPALClaim(Moniker, website, details string, endpoints ipal.Endpoints, bond sdk.Coin, commit bool) (types.BroadcastTxResult, error)
+	CIPALClaim(req cipal.IPALUserRequest, memo string, commit bool) (types.BroadcastTxResult, error)
 }
 
 type client struct {
