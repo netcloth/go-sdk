@@ -6,9 +6,14 @@ import (
 )
 
 type (
+	CIPALServiceInfo struct {
+		Type    string `json:"type"`
+		Address string `json:"address"`
+	}
+
 	CIPALResult struct {
-		UserAddress string `json:"user_address"`
-		ServerIp    string `json:"server_ip"`
+		UserAddress  string             `json:"user_address"`
+		ServiceInfos []CIPALServiceInfo `json:"service_infos"`
 	}
 
 	CIPALBody struct {

@@ -5,9 +5,7 @@ import (
 	"strconv"
 
 	"github.com/NetCloth/netcloth-chain/modules/auth"
-	"github.com/NetCloth/netcloth-chain/modules/bank"
 	"github.com/NetCloth/netcloth-chain/modules/ipal"
-
 	sdk "github.com/NetCloth/netcloth-chain/types"
 
 	"github.com/NetCloth/go-sdk/client/types"
@@ -20,8 +18,6 @@ func (c *client) IPALClaim(userRequest ipal.IPALUserRequest, memo string, commit
 		result types.BroadcastTxResult
 	)
 	from := c.keyManager.GetAddr()
-
-	// check userRequest
 
 	msg := buildBankIPALClaimMsg(from, userRequest)
 
@@ -76,24 +72,7 @@ func (c *client) IPALClaim(userRequest ipal.IPALUserRequest, memo string, commit
 	return c.rpcClient.BroadcastTx(txBroadcastType, txBytes)
 }
 
-func getCoin(icoins []types.Coin, denom string) sdk.Coin {
-	for _, vcoin := range icoins {
-		if vcoin.Denom == denom {
-			amount, ok := sdk.NewIntFromString(vcoin.Amount)
-			if ok {
-				return sdk.Coin{
-					Denom:  vcoin.Denom,
-					Amount: amount,
-				}
-			}
-
-		}
-	}
-	return sdk.Coin{}
-}
-
-// buildBankSendMsg builds the sending coins msg
-func buildBankIPALClaimMsg(from sdk.AccAddress, userRequest ipal.IPALUserRequest) bank.MsgSend {
+func buildBankIPALClaimMsg(from sdk.AccAddress, userRequest ipal.IPALUserRequest) ipal.MsgIPALClaim {
 	msg := ipal.MsgIPALClaim{
 		From:        from,
 		UserRequest: userRequest,

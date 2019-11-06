@@ -5,6 +5,8 @@ github.com/NetCloth/netcloth-chain v1.0.0 h1:Sr9m//FUunn5hH/My6jQvyv2mL1Xu0Rve99
 github.com/NetCloth/netcloth-chain v1.0.0/go.mod h1:W0mlcu0o2FfmnxUYcLZC5vfTyeKi7MqYijpsUafYbhY=
 github.com/NetCloth/netcloth-chain v1.0.3 h1:8XTWfnY5EKYj+u9IUGNvq7L5LzmTFBgE3zL5apH3B6E=
 github.com/NetCloth/netcloth-chain v1.0.3/go.mod h1:7WwSsNF33m1JQCfcXcna6oYc2t0ReFl7fSqNZX1/GMc=
+github.com/NetCloth/netcloth-chain v1.0.4 h1:ifparhDy7jAlbXStgaWYSuQ+27at7vzRFBnZC9vd2Qg=
+github.com/NetCloth/netcloth-chain v1.0.4/go.mod h1:7WwSsNF33m1JQCfcXcna6oYc2t0ReFl7fSqNZX1/GMc=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/VividCortex/gohistogram v1.0.0/go.mod h1:Pf5mBqqDxYaXu3hDrrU+w6nw50o/4+TcAqDqk/vUH7g=
 github.com/Workiva/go-datastructures v1.0.50/go.mod h1:Z+F2Rca0qCsVYDS8z7bAGm8f3UkzuWYS/oBZz5a7VVA=

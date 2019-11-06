@@ -3,7 +3,7 @@ module github.com/NetCloth/go-sdk
 go 1.12
 
 require (
-	github.com/NetCloth/netcloth-chain v1.0.3
+	github.com/NetCloth/netcloth-chain v1.0.4
 	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d // indirect
 	github.com/elazarl/goproxy v0.0.0-20191011121108-aa519ddbe484 // indirect
 	github.com/parnurzeal/gorequest v0.2.16

@@ -8,6 +8,10 @@ import (
 	"github.com/NetCloth/go-sdk/util"
 )
 
+const (
+	AccAddr = "nch1skhg3tjm09dzcy2zn673006z4c3p47rg929se9"
+)
+
 var (
 	baseUrl     = "http://127.0.0.1:1317"
 	nodeUrl     = "tcp://127.0.0.1:26657"
@@ -30,21 +34,21 @@ func TestNewNCHClient(t *testing.T) {
 		t.Fatal(err)
 	} else {
 		// query account
-		if res, err := c.QueryAccount("nch1dtpryue8ptzjjm32fwr0a7u5qg6wz02hhnpa30"); err != nil {
+		if res, err := c.QueryAccount(AccAddr); err != nil {
 			t.Fatal(err)
 		} else {
 			t.Log(util.ToJsonIgnoreErr(res))
 		}
 
 		// query ipal
-		if res, err := c.QueryCIPALByAddress("nch1jx2jcycf86vll2yfqttrj85ukws34xjhn8ef4q"); err != nil {
+		if res, err := c.QueryCIPALByAddress(AccAddr); err != nil {
 			t.Fatal(err)
 		} else {
 			t.Log(util.ToJsonIgnoreErr(res))
 		}
 
 		//query aipal
-		if res, err := c.QueryAIPALByAddress("nch1fxs3zym0tk0gva9mcwdghcwh6d96426d8m4lts"); err != nil {
+		if res, err := c.QueryAIPALByAddress(AccAddr); err != nil {
 			t.Fatal(err)
 		} else {
 			t.Log(util.ToJsonIgnoreErr(res))
