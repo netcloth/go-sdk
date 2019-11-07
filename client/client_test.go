@@ -1,8 +1,6 @@
 package client
 
 import (
-	"fmt"
-	"os"
 	"testing"
 	"time"
 
@@ -23,7 +21,7 @@ import (
 )
 
 const (
-	AccAddr = "nch1skhg3tjm09dzcy2zn673006z4c3p47rg929se9"
+	AccAddr = "nch1ugus2df3sydca3quula5yjqfntuq5aaxweezpt"
 )
 
 var (
@@ -77,7 +75,6 @@ func Test_IPALClaim(t *testing.T) {
 	basicClient := basic.NewClient("http://127.0.0.1:1317")
 	lite := lcd.NewClient(basicClient)
 	rpcClient := rpc.NewClient("tcp://127.0.0.1:26657")
-
 	c, err := tx.NewClient("nch-prinet-sky", 1, km, lite, rpcClient)
 
 	bond := sdk.Coin{
@@ -86,7 +83,7 @@ func Test_IPALClaim(t *testing.T) {
 	}
 
 	var eps ipal.Endpoints
-	ep := ipal.NewEndpoint(10, "192.168.100.100:10000")
+	ep := ipal.NewEndpoint(10, "192.168.100.100:20000")
 	eps = append(eps, ep)
 	if res, err := c.IPALClaim("sky", "sky weibsite", "sky details", eps, bond, false); err != nil {
 		t.Fatal(err)
@@ -110,9 +107,7 @@ func Test_CIPALClaim(t *testing.T) {
 	}
 
 	expiration := time.Now().UTC().AddDate(0, 0, 1)
-	adMsg := cipal.NewADParam(AccAddr, AccAddr, 1, expiration)
-	fmt.Fprintf(os.Stderr, "adMsg = %v\n", adMsg)
-
+	adMsg := cipal.NewADParam(AccAddr, AccAddr, 6, expiration)
 	sigBytes, err := km.SignBytes(adMsg.GetSignBytes())
 	if err != nil {
 		panic(err)
@@ -123,13 +118,7 @@ func Test_CIPALClaim(t *testing.T) {
 		Signature: sigBytes,
 	}
 
-	msg := cipal.NewMsgIPALClaim(sdk.AccAddress(km.GetPrivKey().PubKey().Address()), AccAddr, AccAddr, 1, expiration, stdSig)
-	fmt.Fprintf(os.Stderr, "%v\n", msg)
-	if err := msg.ValidateBasic(); err != nil {
-		panic(err)
-	}
-
-	var req cipal.IPALUserRequest
+	req := cipal.NewIPALUserRequest(AccAddr, AccAddr, 6, expiration, stdSig)
 	if res, err := c.CIPALClaim(req, "memo", false); err != nil {
 		t.Fatal(err)
 	} else {

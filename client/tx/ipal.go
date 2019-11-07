@@ -17,9 +17,7 @@ import (
 )
 
 func (c *client) CIPALClaim(req cipal.IPALUserRequest, memo string, commit bool) (types.BroadcastTxResult, error) {
-	var (
-		result types.BroadcastTxResult
-	)
+	var result types.BroadcastTxResult
 	from := c.keyManager.GetAddr()
 
 	msg := buildBankIPALClaimMsg(from, req)
@@ -54,14 +52,11 @@ func (c *client) CIPALClaim(req cipal.IPALUserRequest, memo string, commit bool)
 	}
 
 	fmt.Fprintf(os.Stderr, "stdSignMsg = %v\n", stdSignMsg)
-	fmt.Fprintf(os.Stderr, "1---------------------\n")
 	for _, m := range stdSignMsg.Msgs {
 		if err := m.ValidateBasic(); err != nil {
-			fmt.Fprintf(os.Stderr, "2---------------------\n")
 			return result, err
 		}
 	}
-	fmt.Fprintf(os.Stderr, "3---------------------\n")
 
 	txBytes, err := c.keyManager.Sign(stdSignMsg)
 	if err != nil {
