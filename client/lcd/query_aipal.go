@@ -31,7 +31,7 @@ type (
 func (c *client) QueryAIPALByAddress(address string) (AIPALBody, error) {
 	var r AIPALBody
 
-	if _, body, err := c.httpClient.Get(fmt.Sprintf(UriQueryAIPAL, address), nil); err != nil {
+	if _, body, err := c.httpClient.Get(fmt.Sprintf(UriQueryIPAL, address), nil); err != nil {
 		return r, err
 	} else {
 		if err := json.Unmarshal(body, &r); err != nil {

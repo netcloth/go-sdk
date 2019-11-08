@@ -1,8 +1,11 @@
 package client
 
 import (
+	"encoding/hex"
 	"testing"
 	"time"
+
+	"github.com/tendermint/tendermint/crypto/secp256k1"
 
 	"github.com/NetCloth/netcloth-chain/modules/cipal"
 
@@ -63,6 +66,17 @@ func TestNewNCHClient(t *testing.T) {
 		} else {
 			t.Log(util.ToJsonIgnoreErr(res))
 		}
+
+		pubkeyStr := "020268AA87DA53D0667FF931E741635E1409CB2E105D409B3C6253E13FF57BDEDC"
+		t.Log(keys.GetBech32AddrByPubkeyStr(pubkeyStr))
+
+		var pubkey secp256k1.PubKeySecp256k1
+		pubkeyHex, err := hex.DecodeString(pubkeyStr)
+		if err != nil {
+			return
+		}
+		copy(pubkey[:], pubkeyHex)
+		t.Log(keys.GetBech32AddrByPubkey(pubkey))
 	}
 }
 

@@ -12,7 +12,7 @@ type (
 func (c *client) QueryAIPALList() (AIPALListBody, error) {
 	var r AIPALListBody
 
-	if _, body, err := c.httpClient.Get(UriQueryAIPALList, nil); err != nil {
+	if _, body, err := c.httpClient.Get(UriQueryIPALList, nil); err != nil {
 		return r, err
 	} else {
 		if err := json.Unmarshal(body, &r); err != nil {

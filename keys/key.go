@@ -1,6 +1,7 @@
 package keys
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -56,6 +57,27 @@ func (k *keyManager) GetPrivKey() crypto.PrivKey {
 
 func (k *keyManager) GetAddr() types.AccAddress {
 	return k.addr
+}
+
+func GetBech32AddrByPubkeyStr(pubkeyStr string) (string, error) {
+	if len(pubkeyStr) == 0 {
+		return "", fmt.Errorf("pubkey invalid")
+	}
+
+	pubkeyHex, err := hex.DecodeString(pubkeyStr)
+	if err != nil {
+		return "", err
+	}
+
+	var pk secp256k1.PubKeySecp256k1
+	copy(pk[:], pubkeyHex)
+	addr := types.AccAddress(pk.Address().Bytes())
+
+	return addr.String(), nil
+}
+
+func GetBech32AddrByPubkey(pubkey secp256k1.PubKeySecp256k1) (string, error) {
+	return types.AccAddress(pubkey.Address().Bytes()).String(), nil
 }
 
 func (k *keyManager) makeSignature(msg tx.StdSignMsg) (sig auth.StdSignature, err error) {
