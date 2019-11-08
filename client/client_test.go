@@ -67,6 +67,7 @@ func TestNewNCHClient(t *testing.T) {
 			t.Log(util.ToJsonIgnoreErr(res))
 		}
 
+		//demo for GetBech32AddrByPubkeyStr and GetBech32AddrByPubkey
 		pubkeyStr := "020268AA87DA53D0667FF931E741635E1409CB2E105D409B3C6253E13FF57BDEDC"
 		t.Log(keys.GetBech32AddrByPubkeyStr(pubkeyStr))
 
