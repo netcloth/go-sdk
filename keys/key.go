@@ -1,12 +1,14 @@
 package keys
 
 import (
+	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 
 	"github.com/pkg/errors"
+	"golang.org/x/crypto/ripemd160"
 
 	"github.com/NetCloth/netcloth-chain/modules/auth"
 	"github.com/NetCloth/netcloth-chain/types"
@@ -15,6 +17,7 @@ import (
 	"github.com/NetCloth/go-sdk/types/tx"
 
 	"github.com/NetCloth/netcloth-chain/crypto/keys/mintkey"
+	tceec_secp256k1 "github.com/btcsuite/btcd/btcec"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 )
@@ -57,6 +60,39 @@ func (k *keyManager) GetPrivKey() crypto.PrivKey {
 
 func (k *keyManager) GetAddr() types.AccAddress {
 	return k.addr
+}
+
+func (k *keyManager) GetUCPubKey() (UCPubKey []byte, err error) {
+	pubkey, err := tceec_secp256k1.ParsePubKey(k.GetPrivKey().PubKey().Bytes(), tceec_secp256k1.S256())
+	if err != nil {
+		return nil, err
+	}
+
+	return pubkey.SerializeUncompressed(), nil
+}
+
+func (k *keyManager) GetUCAddress() (crypto.Address, error) {
+	UnPubKey, err := k.GetUCPubKey()
+	if err != nil {
+		return nil, err
+	}
+
+	hasherSHA256 := sha256.New()
+	hasherSHA256.Write(UnPubKey[:])
+	sha := hasherSHA256.Sum(nil)
+
+	hasherRIPEMD160 := ripemd160.New()
+	hasherRIPEMD160.Write(sha)
+	return crypto.Address(hasherRIPEMD160.Sum(nil)), nil
+}
+
+func (k *keyManager) GetUCAddressBech32() (string, error) {
+	addr, err := k.GetUCAddress()
+	if err != nil {
+		return "", err
+	}
+
+	return types.AccAddress(addr).String(), nil
 }
 
 func GetBech32AddrByPubkeyStr(pubkeyStr string) (string, error) {

@@ -19,7 +19,7 @@ type ServiceInfo struct {
 type ADParamType struct {
 	UserAddress string      `json:"user_address" yaml:"user_address"`
 	ServiceInfo ServiceInfo `json:"service_info" yaml:"service_info"`
-	Expiration  time.Time   `json:"expriration"`
+	Expiration  time.Time   `json:"expiration"`
 }
 
 type MySignature struct {
