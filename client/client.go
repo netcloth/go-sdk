@@ -1,12 +1,12 @@
 package client
 
 import (
-	"github.com/NetCloth/go-sdk/client/basic"
-	"github.com/NetCloth/go-sdk/client/lcd"
-	"github.com/NetCloth/go-sdk/client/rpc"
-	"github.com/NetCloth/go-sdk/client/tx"
-	"github.com/NetCloth/go-sdk/keys"
-	"github.com/NetCloth/go-sdk/types"
+	"github.com/netcloth/go-sdk/client/basic"
+	"github.com/netcloth/go-sdk/client/lcd"
+	"github.com/netcloth/go-sdk/client/rpc"
+	"github.com/netcloth/go-sdk/client/tx"
+	"github.com/netcloth/go-sdk/keys"
+	"github.com/netcloth/go-sdk/types"
 )
 
 type nchClient struct {

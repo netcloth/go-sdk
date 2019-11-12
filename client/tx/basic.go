@@ -1,14 +1,14 @@
 package tx
 
 import (
-	"github.com/NetCloth/go-sdk/client/lcd"
-	"github.com/NetCloth/go-sdk/client/rpc"
-	"github.com/NetCloth/go-sdk/client/types"
-	"github.com/NetCloth/go-sdk/keys"
-	commontypes "github.com/NetCloth/go-sdk/types"
-	"github.com/NetCloth/netcloth-chain/modules/cipal"
-	"github.com/NetCloth/netcloth-chain/modules/ipal"
-	sdk "github.com/NetCloth/netcloth-chain/types"
+	"github.com/netcloth/go-sdk/client/lcd"
+	"github.com/netcloth/go-sdk/client/rpc"
+	"github.com/netcloth/go-sdk/client/types"
+	"github.com/netcloth/go-sdk/keys"
+	commontypes "github.com/netcloth/go-sdk/types"
+	"github.com/netcloth/netcloth-chain/modules/cipal"
+	"github.com/netcloth/netcloth-chain/modules/ipal"
+	sdk "github.com/netcloth/netcloth-chain/types"
 )
 
 type TxClient interface {

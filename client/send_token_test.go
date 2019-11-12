@@ -3,15 +3,15 @@ package client
 import (
 	"testing"
 
-	"github.com/NetCloth/go-sdk/client/tx"
+	"github.com/netcloth/go-sdk/client/tx"
 
-	"github.com/NetCloth/go-sdk/client/basic"
-	"github.com/NetCloth/go-sdk/client/lcd"
-	"github.com/NetCloth/go-sdk/client/rpc"
-	"github.com/NetCloth/go-sdk/client/types"
-	"github.com/NetCloth/go-sdk/keys"
-	commontypes "github.com/NetCloth/go-sdk/types"
-	"github.com/NetCloth/go-sdk/util"
+	"github.com/netcloth/go-sdk/client/basic"
+	"github.com/netcloth/go-sdk/client/lcd"
+	"github.com/netcloth/go-sdk/client/rpc"
+	"github.com/netcloth/go-sdk/client/types"
+	"github.com/netcloth/go-sdk/keys"
+	commontypes "github.com/netcloth/go-sdk/types"
+	"github.com/netcloth/go-sdk/util"
 )
 
 func TestClient_SendToken(t *testing.T) {

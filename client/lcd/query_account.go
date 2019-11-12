@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/NetCloth/go-sdk/client/types"
+	"github.com/net/go-sdk/client/types"
 )
 
 type (

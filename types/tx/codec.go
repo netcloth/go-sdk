@@ -1,12 +1,12 @@
 package tx
 
 import (
-	"github.com/NetCloth/netcloth-chain/codec"
-	"github.com/NetCloth/netcloth-chain/modules/auth"
-	"github.com/NetCloth/netcloth-chain/modules/bank"
-	"github.com/NetCloth/netcloth-chain/modules/cipal"
-	"github.com/NetCloth/netcloth-chain/modules/ipal"
-	sdk "github.com/NetCloth/netcloth-chain/types"
+	"github.com/netcloth/netcloth-chain/codec"
+	"github.com/netcloth/netcloth-chain/modules/auth"
+	"github.com/netcloth/netcloth-chain/modules/bank"
+	"github.com/netcloth/netcloth-chain/modules/cipal"
+	"github.com/netcloth/netcloth-chain/modules/ipal"
+	sdk "github.com/netcloth/netcloth-chain/types"
 
 	"github.com/tendermint/go-amino"
 )

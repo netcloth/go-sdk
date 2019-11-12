@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	sdk "github.com/NetCloth/netcloth-chain/types"
+	sdk "github.com/netcloth/netcloth-chain/types"
 )
 
 func TestNewKeyStoreKeyManager(t *testing.T) {

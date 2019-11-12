@@ -10,14 +10,14 @@ import (
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/ripemd160"
 
-	"github.com/NetCloth/netcloth-chain/modules/auth"
-	"github.com/NetCloth/netcloth-chain/types"
-	ctypes "github.com/NetCloth/netcloth-chain/types"
+	"github.com/netcloth/netcloth-chain/modules/auth"
+	"github.com/netcloth/netcloth-chain/types"
+	ctypes "github.com/netcloth/netcloth-chain/types"
 
-	"github.com/NetCloth/go-sdk/types/tx"
+	"github.com/netcloth/go-sdk/types/tx"
 
-	"github.com/NetCloth/netcloth-chain/crypto/keys/mintkey"
 	tceec_secp256k1 "github.com/btcsuite/btcd/btcec"
+	"github.com/netcloth/netcloth-chain/crypto/keys/mintkey"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 )

@@ -1,8 +1,8 @@
 package tx
 
 import (
-	"github.com/NetCloth/netcloth-chain/modules/auth"
-	sdk "github.com/NetCloth/netcloth-chain/types"
+	"github.com/netcloth/netcloth-chain/modules/auth"
+	sdk "github.com/netcloth/netcloth-chain/types"
 )
 
 // StdSignMsg is a convenience structure for passing along

@@ -7,20 +7,20 @@ import (
 
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
-	"github.com/NetCloth/netcloth-chain/modules/cipal"
+	"github.com/netcloth/netcloth-chain/modules/cipal"
 
-	"github.com/NetCloth/netcloth-chain/modules/auth"
-	"github.com/NetCloth/netcloth-chain/modules/ipal"
+	"github.com/netcloth/netcloth-chain/modules/auth"
+	"github.com/netcloth/netcloth-chain/modules/ipal"
 
-	sdk "github.com/NetCloth/netcloth-chain/types"
+	sdk "github.com/netcloth/netcloth-chain/types"
 
-	"github.com/NetCloth/go-sdk/client/basic"
-	"github.com/NetCloth/go-sdk/client/lcd"
-	"github.com/NetCloth/go-sdk/client/rpc"
-	"github.com/NetCloth/go-sdk/client/tx"
-	"github.com/NetCloth/go-sdk/keys"
-	"github.com/NetCloth/go-sdk/types"
-	"github.com/NetCloth/go-sdk/util"
+	"github.com/netcloth/go-sdk/client/basic"
+	"github.com/netcloth/go-sdk/client/lcd"
+	"github.com/netcloth/go-sdk/client/rpc"
+	"github.com/netcloth/go-sdk/client/tx"
+	"github.com/netcloth/go-sdk/keys"
+	"github.com/netcloth/go-sdk/types"
+	"github.com/netcloth/go-sdk/util"
 )
 
 const (

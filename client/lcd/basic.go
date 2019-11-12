@@ -1,7 +1,7 @@
 package lcd
 
 import (
-	"github.com/NetCloth/go-sdk/client/basic"
+	"github.com/netcloth/go-sdk/client/basic"
 )
 
 type LiteClient interface {

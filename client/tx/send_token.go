@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/NetCloth/netcloth-chain/modules/auth"
-	"github.com/NetCloth/netcloth-chain/modules/bank"
-	sdk "github.com/NetCloth/netcloth-chain/types"
+	"github.com/netcloth/netcloth-chain/modules/auth"
+	"github.com/netcloth/netcloth-chain/modules/bank"
+	sdk "github.com/netcloth/netcloth-chain/types"
 
-	"github.com/NetCloth/go-sdk/client/types"
-	"github.com/NetCloth/go-sdk/types/tx"
-	"github.com/NetCloth/go-sdk/util/constant"
+	"github.com/netcloth/go-sdk/client/types"
+	"github.com/netcloth/go-sdk/types/tx"
+	"github.com/netcloth/go-sdk/util/constant"
 )
 
 func (c *client) SendToken(receiver string, coins []types.Coin, memo string, commit bool) (types.BroadcastTxResult, error) {

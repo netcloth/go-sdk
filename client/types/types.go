@@ -1,7 +1,7 @@
 package types
 
 import (
-	"github.com/NetCloth/netcloth-chain/types"
+	"github.com/netcloth/netcloth-chain/types"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	cmn "github.com/tendermint/tendermint/libs/common"

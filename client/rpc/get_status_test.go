@@ -3,7 +3,7 @@ package rpc
 import (
 	"testing"
 
-	"github.com/NetCloth/go-sdk/util"
+	"github.com/netcloth/go-sdk/util"
 )
 
 var (

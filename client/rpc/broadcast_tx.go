@@ -1,8 +1,8 @@
 package rpc
 
 import (
-	itypes "github.com/NetCloth/go-sdk/client/types"
-	"github.com/NetCloth/go-sdk/util/constant"
+	itypes "github.com/netcloth/go-sdk/client/types"
+	"github.com/netcloth/go-sdk/util/constant"
 
 	"github.com/pkg/errors"
 	"github.com/tendermint/tendermint/types"

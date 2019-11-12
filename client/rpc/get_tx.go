@@ -3,9 +3,9 @@ package rpc
 import (
 	"encoding/hex"
 
-	"github.com/NetCloth/netcloth-chain/modules/auth"
+	"github.com/netcloth/netcloth-chain/modules/auth"
 
-	"github.com/NetCloth/go-sdk/types/tx"
+	"github.com/netcloth/go-sdk/types/tx"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/types"
