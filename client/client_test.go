@@ -79,7 +79,7 @@ func TestNewNCHClient(t *testing.T) {
 }
 
 func Test_IPALClaim(t *testing.T) {
-	km, err := keys.NewKeystoreByImportKeystore("./ks_12345678.txt", "12345678")
+	km, err := keys.NewKeystoreByImportKeystore("../keys/ks_12345678.txt", "12345678")
 	if err != nil {
 		panic(err)
 	}
@@ -105,7 +105,7 @@ func Test_IPALClaim(t *testing.T) {
 }
 
 func Test_CIPALClaim(t *testing.T) {
-	km, err := keys.NewKeystoreByImportKeystore("./ks_12345678.txt", "12345678")
+	km, err := keys.NewKeystoreByImportKeystore("../keys/ks_12345678.txt", "12345678")
 	if err != nil {
 		panic(err)
 	}
@@ -139,7 +139,7 @@ func Test_CIPALClaim(t *testing.T) {
 }
 
 func Test_CIPALClaim1(t *testing.T) {
-	km, err := keys.NewKeystoreByImportKeystore("./ks_12345678.txt", "12345678")
+	km, err := keys.NewKeystoreByImportKeystore("../keys/ks_12345678.txt", "12345678")
 	if err != nil {
 		panic(err)
 	}
