@@ -2,8 +2,7 @@ package rpc
 
 import (
 	itypes "github.com/netcloth/go-sdk/client/types"
-	"github.com/netcloth/go-sdk/util/constant"
-
+	"github.com/netcloth/go-sdk/constants"
 	"github.com/pkg/errors"
 	"github.com/tendermint/tendermint/types"
 )
@@ -13,7 +12,7 @@ func (c *client) BroadcastTx(broadcastType string, tx types.Tx) (itypes.Broadcas
 		broadcastTxResult itypes.BroadcastTxResult
 	)
 	switch broadcastType {
-	case constant.TxBroadcastTypeSync:
+	case constants.TxBroadcastTypeSync:
 		if result, err := c.rpc.BroadcastTxSync(tx); err != nil {
 			return broadcastTxResult, err
 		} else {
@@ -25,7 +24,7 @@ func (c *client) BroadcastTx(broadcastType string, tx types.Tx) (itypes.Broadcas
 			}
 			return broadcastTxResult, nil
 		}
-	case constant.TxBroadcastTypeAsync:
+	case constants.TxBroadcastTypeAsync:
 		if res, err := c.rpc.BroadcastTxAsync(tx); err != nil {
 			return broadcastTxResult, err
 		} else {
@@ -37,7 +36,7 @@ func (c *client) BroadcastTx(broadcastType string, tx types.Tx) (itypes.Broadcas
 			}
 			return broadcastTxResult, nil
 		}
-	case constant.TxBroadcastTypeCommit:
+	case constants.TxBroadcastTypeCommit:
 		if res, err := c.rpc.BroadcastTxCommit(tx); err != nil {
 			return broadcastTxResult, err
 		} else {

@@ -24,7 +24,7 @@ type (
 
 	IPALBody struct {
 		Height string     `json:"height"`
-		Resutl IPALResult `json:"result"`
+		Result IPALResult `json:"result"`
 	}
 )
 

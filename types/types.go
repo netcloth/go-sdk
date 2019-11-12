@@ -7,14 +7,6 @@ import (
 	"github.com/netcloth/netcloth-chain/modules/ipal"
 )
 
-type NetworkType int
-
-const (
-	_ NetworkType = iota
-	Alphanet
-	Mainnet
-)
-
 type (
 	MsgSend             = bank.MsgSend
 	MsgServiceNodeClaim = ipal.MsgServiceNodeClaim

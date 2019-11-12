@@ -4,20 +4,23 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/netcloth/go-sdk/constants"
+
+	"github.com/netcloth/go-sdk/config"
+
 	"github.com/netcloth/netcloth-chain/modules/auth"
 	"github.com/netcloth/netcloth-chain/modules/bank"
 	sdk "github.com/netcloth/netcloth-chain/types"
 
 	"github.com/netcloth/go-sdk/client/types"
 	"github.com/netcloth/go-sdk/types/tx"
-	"github.com/netcloth/go-sdk/util/constant"
 )
 
 func (c *client) SendToken(receiver string, coins []types.Coin, memo string, commit bool) (types.BroadcastTxResult, error) {
 	var (
 		result types.BroadcastTxResult
 	)
-	from := c.keyManager.GetAddr()
+	from := c.KeyManager.GetAddr()
 
 	to, err := types.AccAddrFromBech32(receiver)
 	if err != nil {
@@ -36,11 +39,11 @@ func (c *client) SendToken(receiver string, coins []types.Coin, memo string, com
 	}
 
 	//  check balance is enough
-	amount := getCoin(accountBody.Result.Value.Coins, constant.TxDefaultDenom)
+	amount := getCoin(accountBody.Result.Value.Coins, config.TxDefaultDenom)
 
-	totalfee := sdk.NewInt(constant.TxDefaultFeeAmount)
+	totalfee := sdk.NewInt(config.TxDefaultFeeAmount)
 	for _, val := range sdkCoins {
-		if val.Denom == constant.TxDefaultDenom {
+		if val.Denom == config.TxDefaultDenom {
 			totalfee = totalfee.Add(val.Amount)
 		}
 	}
@@ -51,8 +54,8 @@ func (c *client) SendToken(receiver string, coins []types.Coin, memo string, com
 
 	fee := sdk.Coins{
 		{
-			Denom:  constant.TxDefaultDenom,
-			Amount: sdk.NewInt(constant.TxDefaultFeeAmount),
+			Denom:  config.TxDefaultDenom,
+			Amount: sdk.NewInt(config.TxDefaultFeeAmount),
 		},
 	}
 	an, err := strconv.Atoi(accountBody.Result.Value.AccountNumber)
@@ -61,7 +64,7 @@ func (c *client) SendToken(receiver string, coins []types.Coin, memo string, com
 		ChainID:       c.chainId,
 		AccountNumber: uint64(an),
 		Sequence:      uint64(s),
-		Fee:           auth.NewStdFee(constant.TxDefaultGas, fee),
+		Fee:           auth.NewStdFee(config.TxDefaultGas, fee),
 		Msgs:          []sdk.Msg{msg},
 		Memo:          memo,
 	}
@@ -72,16 +75,16 @@ func (c *client) SendToken(receiver string, coins []types.Coin, memo string, com
 		}
 	}
 
-	txBytes, err := c.keyManager.Sign(stdSignMsg)
+	txBytes, err := c.KeyManager.Sign(stdSignMsg)
 	if err != nil {
 		return result, err
 	}
 
 	var txBroadcastType string
 	if commit {
-		txBroadcastType = constant.TxBroadcastTypeCommit
+		txBroadcastType = constants.TxBroadcastTypeCommit
 	} else {
-		txBroadcastType = constant.TxBroadcastTypeSync
+		txBroadcastType = constants.TxBroadcastTypeSync
 	}
 
 	return c.rpcClient.BroadcastTx(txBroadcastType, txBytes)

@@ -7,28 +7,16 @@ import (
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
 	"github.com/netcloth/go-sdk/keys"
-	"github.com/netcloth/go-sdk/types"
 	"github.com/netcloth/go-sdk/util"
 )
 
-const (
-	AccAddr = "nch1ugus2df3sydca3quula5yjqfntuq5aaxweezpt"
-)
-
-var (
-	baseUrl     = "http://127.0.0.1:1317"
-	nodeUrl     = "tcp://127.0.0.1:26657"
-	networkType = types.Alphanet
-	km          keys.KeyManager
-)
-
 func TestNewNCHClient(t *testing.T) {
-	c, err := NewNCHClient(baseUrl, nodeUrl, networkType, km)
+	c, err := NewNCHClient()
 	if err != nil {
 		t.Fatal(err)
 	} else {
 		// query account
-		if res, err := c.QueryAccount(AccAddr); err != nil {
+		if res, err := c.QueryAccount("nch1ugus2df3sydca3quula5yjqfntuq5aaxweezpt"); err != nil {
 			t.Fatal(err)
 		} else {
 			t.Log(util.ToJsonIgnoreErr(res))

@@ -16,7 +16,7 @@ func (c *client) GetStatus() (ResultStatus, error) {
 	)
 	status, err := c.rpc.Status()
 	if err != nil {
-		return res, nil
+		return res, err
 	} else {
 		res.NodeInfo = status.NodeInfo
 		return res, nil

@@ -3,13 +3,13 @@ package keys
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/netcloth/go-sdk/config"
 
-	"github.com/netcloth/go-sdk/util/constant"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestNewKeyManager(t *testing.T) {
-	if km, err := NewKeyManager(constant.KeyStoreFileAbsPath, "12345678"); err != nil {
+	if km, err := NewKeyManager(config.KeyStoreFileAbsPath, config.KeyStorePasswd); err != nil {
 		t.Fatal(err)
 	} else {
 		msg := []byte("hello world")
