@@ -3,14 +3,14 @@ package lcd
 import "encoding/json"
 
 type (
-	AIPALListBody struct {
-		Height string        `json:"height"`
-		Result []AIPALResult `json:"result"`
+	IPALListBody struct {
+		Height string       `json:"height"`
+		Result []IPALResult `json:"result"`
 	}
 )
 
-func (c *client) QueryAIPALList() (AIPALListBody, error) {
-	var r AIPALListBody
+func (c *client) QueryIPALList() (IPALListBody, error) {
+	var r IPALListBody
 
 	if _, body, err := c.httpClient.Get(UriQueryIPALList, nil); err != nil {
 		return r, err

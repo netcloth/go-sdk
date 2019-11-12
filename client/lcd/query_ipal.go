@@ -13,7 +13,7 @@ type (
 		Endpoint string `json:"endpoint"`
 	}
 
-	AIPALResult struct {
+	IPALResult struct {
 		OperatorAddress string     `json:"operator_address"`
 		Moniker         string     `json:"moniker"`
 		Website         string     `json:"website"`
@@ -22,14 +22,14 @@ type (
 		Bond            types.Coin `json:"bond"`
 	}
 
-	AIPALBody struct {
-		Height string      `json:"height"`
-		Resutl AIPALResult `json:"result"`
+	IPALBody struct {
+		Height string     `json:"height"`
+		Resutl IPALResult `json:"result"`
 	}
 )
 
-func (c *client) QueryAIPALByAddress(address string) (AIPALBody, error) {
-	var r AIPALBody
+func (c *client) QueryIPALByAddress(address string) (IPALBody, error) {
+	var r IPALBody
 
 	if _, body, err := c.httpClient.Get(fmt.Sprintf(UriQueryIPAL, address), nil); err != nil {
 		return r, err
