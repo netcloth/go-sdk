@@ -14,11 +14,11 @@ Go version above 1.12
 
 ## Use go mod(recommend)
 
-Add "github.com/NetCloth/go-sdk" dependency into your go.mod file.
+Add "github.com/netcloth/go-sdk" dependency into your go.mod file.
 
 ```go
 require (
-	github.com/NetCloth/go-sdk latest
+	github.com/netcloth/go-sdk latest
 )
 ```
 
@@ -61,8 +61,8 @@ func TestNewKeyStoreKeyManager(t *testing.T) {
 
 ```go
 import (
-	"github.com/NetCloth/go-sdk/client"
-	"github.com/NetCloth/go-sdk/types"
+	"github.com/netcloth/go-sdk/client"
+	"github.com/netcloth/go-sdk/types"
 )
 var (
 	baseUrl, nodeUrl string
