@@ -27,6 +27,7 @@ type KeyManager interface {
 	SignBytes(msg []byte) ([]byte, error)
 	GetPrivKey() crypto.PrivKey
 	GetAddr() types.AccAddress
+	GetUCPubKey() (UCPubKey []byte, err error)
 }
 
 type keyManager struct {
@@ -63,7 +64,7 @@ func (k *keyManager) GetAddr() types.AccAddress {
 }
 
 func (k *keyManager) GetUCPubKey() (UCPubKey []byte, err error) {
-	pubkey, err := tceec_secp256k1.ParsePubKey(k.GetPrivKey().PubKey().Bytes(), tceec_secp256k1.S256())
+	pubkey, err := tceec_secp256k1.ParsePubKey(k.GetPrivKey().PubKey().Bytes()[5:], tceec_secp256k1.S256())
 	if err != nil {
 		return nil, err
 	}
@@ -71,23 +72,44 @@ func (k *keyManager) GetUCPubKey() (UCPubKey []byte, err error) {
 	return pubkey.SerializeUncompressed(), nil
 }
 
-func (k *keyManager) GetUCAddress() (crypto.Address, error) {
-	UnPubKey, err := k.GetUCPubKey()
+/*
+	params:
+		uncompressedPubKey: "04b2bf9a87dd7cf1ad998721ffef00713a4d5fb2bae0316eea04268ae877a0bcacd41b5b363911a30c0254ca12148d48e3cd4562e3e4b5d8cd3e6d2107a69754e6"
+	return value:
+		compressedPubKey: 33 bytes compressed pubkey
+		err: is nil if success
+*/
+func GetCompressedPubKey(uncompressedPubKey string) (compressedPubKey []byte, err error) {
+	uncompressedPubKeyHex, err := hex.DecodeString(uncompressedPubKey)
+	if err != nil {
+		return nil, err
+	}
+
+	pubkey, err := tceec_secp256k1.ParsePubKey(uncompressedPubKeyHex, tceec_secp256k1.S256())
+	if err != nil {
+		return nil, err
+	}
+
+	return pubkey.SerializeCompressed(), nil
+}
+
+func GetCompressedAddress(uncompressedPubKey string) (crypto.Address, error) {
+	pubKey, err := GetCompressedPubKey(uncompressedPubKey)
 	if err != nil {
 		return nil, err
 	}
 
 	hasherSHA256 := sha256.New()
-	hasherSHA256.Write(UnPubKey[:])
+	hasherSHA256.Write(pubKey[:])
 	sha := hasherSHA256.Sum(nil)
 
 	hasherRIPEMD160 := ripemd160.New()
 	hasherRIPEMD160.Write(sha)
-	return crypto.Address(hasherRIPEMD160.Sum(nil)), nil
+	return hasherRIPEMD160.Sum(nil), nil
 }
 
-func (k *keyManager) GetUCAddressBech32() (string, error) {
-	addr, err := k.GetUCAddress()
+func GetUCAddressBech32(uncompressedPubKey string) (string, error) {
+	addr, err := GetCompressedAddress(uncompressedPubKey)
 	if err != nil {
 		return "", err
 	}

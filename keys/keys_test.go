@@ -53,5 +53,12 @@ func Test_ImportKeystore(t *testing.T) {
 
 		type kk [33]byte
 		assert.Equal(t, km.GetPrivKey().PubKey().VerifyBytes(msg, signature), true)
+		v, _ := km.GetUCPubKey()
+		t.Log(fmt.Sprintf("v = %x\n", v))
+
+		addr, err := GetUCAddressBech32("04b2bf9a87dd7cf1ad998721ffef00713a4d5fb2bae0316eea04268ae877a0bcacd41b5b363911a30c0254ca12148d48e3cd4562e3e4b5d8cd3e6d2107a69754e6")
+		t.Log(fmt.Sprintf("addr = %s\n", addr))
+		t.Log(fmt.Sprintf("%s\n", km.GetAddr().String()))
+
 	}
 }
