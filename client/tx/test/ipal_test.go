@@ -30,7 +30,7 @@ func Test_IPALClaim(t *testing.T) {
 	}
 
 	var eps ipal.Endpoints
-	ep := ipal.NewEndpoint(10, "192.168.100.100:20000")
+	ep := ipal.NewEndpoint(1, "192.168.100.100:20000")
 	eps = append(eps, ep)
 	if res, err := client.IPALClaim("sky", "sky weibsite", "sky details", eps, bond, false); err != nil {
 		t.Fatal(err)

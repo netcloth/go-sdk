@@ -2,7 +2,10 @@ package client
 
 import (
 	"encoding/hex"
+	"fmt"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
@@ -33,5 +36,11 @@ func TestNewNCHClient(t *testing.T) {
 		}
 		copy(pubkey[:], pubkeyHex)
 		t.Log(keys.PubKey2AddressBech32(pubkey))
+
+		endpoints, err := c.QueryIPALChatServerEndpoints()
+
+		require.True(t, err == nil)
+
+		t.Log(fmt.Sprintf("%v\n", endpoints))
 	}
 }

@@ -2,7 +2,10 @@ package lcd
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+
+	"github.com/netcloth/go-sdk/keys"
 
 	"github.com/netcloth/go-sdk/client/types"
 )
@@ -40,4 +43,30 @@ func (c *client) QueryIPALByAddress(address string) (IPALBody, error) {
 			return r, nil
 		}
 	}
+}
+
+func (c *client) QueryIPALByUNCompressedPubKey(uncompressedPubKey string) (IPALBody, error) {
+	var r IPALBody
+
+	addrBech32, err := keys.UNCompressedPubKey2AddressBech32(uncompressedPubKey)
+	if err != nil {
+		return r, err
+	}
+
+	return c.QueryIPALByAddress(addrBech32)
+}
+
+func (c *client) QueryIPALChatServerEndpointByUNCompressedPubKey(uncompressedPubKey string) (string, error) {
+	ipalInfo, err := c.QueryIPALByUNCompressedPubKey(uncompressedPubKey)
+	if err != nil {
+		return "", err
+	}
+
+	for _, endpoint := range ipalInfo.Result.Endpoints {
+		if endpoint.Type == "1" { //TODO remove magic number "1"
+			return endpoint.Endpoint, nil
+			break
+		}
+	}
+	return "", errors.New("no chat endpoint")
 }

@@ -22,3 +22,24 @@ func (c *client) QueryIPALList() (IPALListBody, error) {
 		}
 	}
 }
+
+func (c *client) QueryIPALChatServerEndpoints() ([]string, error) {
+	var endpoints []string
+
+	ipalList, err := c.QueryIPALList()
+
+	if err != nil {
+		return nil, err
+	}
+
+	for _, ipalInfo := range ipalList.Result {
+		for _, endpoint := range ipalInfo.Endpoints {
+			if endpoint.Type == "1" {
+				endpoints = append(endpoints, endpoint.Endpoint)
+				break
+			}
+		}
+	}
+
+	return endpoints, nil
+}
