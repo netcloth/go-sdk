@@ -3,23 +3,21 @@ package keys
 import (
 	"crypto/sha256"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 
-	"github.com/pkg/errors"
 	"golang.org/x/crypto/ripemd160"
 
+	btcsecp256k1 "github.com/btcsuite/btcd/btcec"
+	"github.com/netcloth/netcloth-chain/crypto/keys/mintkey"
 	"github.com/netcloth/netcloth-chain/modules/auth"
 	"github.com/netcloth/netcloth-chain/types"
 	ctypes "github.com/netcloth/netcloth-chain/types"
-
-	"github.com/netcloth/go-sdk/types/tx"
-
-	tceec_secp256k1 "github.com/btcsuite/btcd/btcec"
-	"github.com/netcloth/netcloth-chain/crypto/keys/mintkey"
+	"github.com/pkg/errors"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/secp256k1"
+
+	"github.com/netcloth/go-sdk/types/tx"
 )
 
 type KeyManager interface {
@@ -27,6 +25,7 @@ type KeyManager interface {
 	SignBytes(msg []byte) ([]byte, error)
 	GetPrivKey() crypto.PrivKey
 	GetAddr() types.AccAddress
+
 	GetUCPubKey() (UCPubKey []byte, err error)
 }
 
@@ -64,7 +63,7 @@ func (k *keyManager) GetAddr() types.AccAddress {
 }
 
 func (k *keyManager) GetUCPubKey() (UCPubKey []byte, err error) {
-	pubkey, err := tceec_secp256k1.ParsePubKey(k.GetPrivKey().PubKey().Bytes()[5:], tceec_secp256k1.S256())
+	pubkey, err := btcsecp256k1.ParsePubKey(k.GetPrivKey().PubKey().Bytes()[5:], btcsecp256k1.S256())
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +84,7 @@ func GetCompressedPubKey(uncompressedPubKey string) (compressedPubKey []byte, er
 		return nil, err
 	}
 
-	pubkey, err := tceec_secp256k1.ParsePubKey(uncompressedPubKeyHex, tceec_secp256k1.S256())
+	pubkey, err := btcsecp256k1.ParsePubKey(uncompressedPubKeyHex, btcsecp256k1.S256())
 	if err != nil {
 		return nil, err
 	}
@@ -117,12 +116,12 @@ func GetUCAddressBech32(uncompressedPubKey string) (string, error) {
 	return types.AccAddress(addr).String(), nil
 }
 
-func GetBech32AddrByPubkeyStr(pubkeyStr string) (string, error) {
-	if len(pubkeyStr) == 0 {
+func GetBech32AddrByPubKeyStr(pubKeyStr string) (string, error) {
+	if len(pubKeyStr) == 0 {
 		return "", fmt.Errorf("pubkey invalid")
 	}
 
-	pubkeyHex, err := hex.DecodeString(pubkeyStr)
+	pubkeyHex, err := hex.DecodeString(pubKeyStr)
 	if err != nil {
 		return "", err
 	}
@@ -134,8 +133,8 @@ func GetBech32AddrByPubkeyStr(pubkeyStr string) (string, error) {
 	return addr.String(), nil
 }
 
-func GetBech32AddrByPubkey(pubkey secp256k1.PubKeySecp256k1) (string, error) {
-	return types.AccAddress(pubkey.Address().Bytes()).String(), nil
+func GetBech32AddrByPubKey(pubKey secp256k1.PubKeySecp256k1) (string, error) {
+	return types.AccAddress(pubKey.Address().Bytes()).String(), nil
 }
 
 func (k *keyManager) makeSignature(msg tx.StdSignMsg) (sig auth.StdSignature, err error) {
@@ -150,35 +149,6 @@ func (k *keyManager) makeSignature(msg tx.StdSignMsg) (sig auth.StdSignature, er
 		PubKey:    k.privKey.PubKey(),
 		Signature: sigBytes,
 	}, nil
-}
-
-func (k *keyManager) recoveryFromKeyStore(keystoreFile string, auth string) error {
-	if auth == "" {
-		return fmt.Errorf("Password is missing ")
-	}
-	keyJson, err := ioutil.ReadFile(keystoreFile)
-	if err != nil {
-		return err
-	}
-	var encryptedKey EncryptedKeyJSON
-	err = json.Unmarshal(keyJson, &encryptedKey)
-	if err != nil {
-		return err
-	}
-	keyBytes, err := decryptKey(&encryptedKey, auth)
-	if err != nil {
-		return err
-	}
-	if len(keyBytes) != 32 {
-		return fmt.Errorf("Len of Keybytes is not equal to 32 ")
-	}
-	var keyBytesArray [32]byte
-	copy(keyBytesArray[:], keyBytes[:32])
-	privKey := secp256k1.PrivKeySecp256k1(keyBytesArray)
-	addr := ctypes.AccAddress(privKey.PubKey().Address())
-	k.addr = addr
-	k.privKey = privKey
-	return nil
 }
 
 func (k *keyManager) ImportKeystore(keystoreFile string, passphrase string) error {
@@ -200,12 +170,6 @@ func (k *keyManager) ImportKeystore(keystoreFile string, passphrase string) erro
 	k.addr = addr
 	k.privKey = privKey
 	return nil
-}
-
-func NewKeyStoreKeyManager(file string, auth string) (KeyManager, error) {
-	k := keyManager{}
-	err := k.recoveryFromKeyStore(file, auth)
-	return &k, err
 }
 
 func NewKeystoreByImportKeystore(file string, auth string) (KeyManager, error) {

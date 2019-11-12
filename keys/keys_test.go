@@ -10,8 +10,8 @@ import (
 )
 
 func TestNewKeyStoreKeyManager(t *testing.T) {
-	file := "./ks_1234567890.json"
-	if km, err := NewKeyStoreKeyManager(file, "1234567890"); err != nil {
+	file := "./ks_12345678.txt"
+	if km, err := NewKeystoreByImportKeystore(file, "12345678"); err != nil {
 		t.Fatal(err)
 	} else {
 		msg := []byte("hello world")

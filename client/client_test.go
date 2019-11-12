@@ -7,13 +7,6 @@ import (
 
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
-	"github.com/netcloth/netcloth-chain/modules/cipal"
-
-	"github.com/netcloth/netcloth-chain/modules/auth"
-	"github.com/netcloth/netcloth-chain/modules/ipal"
-
-	sdk "github.com/netcloth/netcloth-chain/types"
-
 	"github.com/netcloth/go-sdk/client/basic"
 	"github.com/netcloth/go-sdk/client/lcd"
 	"github.com/netcloth/go-sdk/client/rpc"
@@ -21,6 +14,10 @@ import (
 	"github.com/netcloth/go-sdk/keys"
 	"github.com/netcloth/go-sdk/types"
 	"github.com/netcloth/go-sdk/util"
+	"github.com/netcloth/netcloth-chain/modules/auth"
+	"github.com/netcloth/netcloth-chain/modules/cipal"
+	"github.com/netcloth/netcloth-chain/modules/ipal"
+	sdk "github.com/netcloth/netcloth-chain/types"
 )
 
 const (
@@ -69,7 +66,7 @@ func TestNewNCHClient(t *testing.T) {
 
 		//demo for GetBech32AddrByPubkeyStr and GetBech32AddrByPubkey
 		pubkeyStr := "020268AA87DA53D0667FF931E741635E1409CB2E105D409B3C6253E13FF57BDEDC"
-		t.Log(keys.GetBech32AddrByPubkeyStr(pubkeyStr))
+		t.Log(keys.GetBech32AddrByPubKeyStr(pubkeyStr))
 
 		var pubkey secp256k1.PubKeySecp256k1
 		pubkeyHex, err := hex.DecodeString(pubkeyStr)
@@ -77,7 +74,7 @@ func TestNewNCHClient(t *testing.T) {
 			return
 		}
 		copy(pubkey[:], pubkeyHex)
-		t.Log(keys.GetBech32AddrByPubkey(pubkey))
+		t.Log(keys.GetBech32AddrByPubKey(pubkey))
 	}
 }
 
