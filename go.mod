@@ -3,11 +3,11 @@ module github.com/netcloth/go-sdk
 go 1.12
 
 require (
-	github.com/netcloth/netcloth-chain v1.0.8
 	github.com/btcsuite/btcd v0.0.0-20190115013929-ed77733ec07d
 	github.com/btcsuite/btcutil v0.0.0-20180706230648-ab6388e0c60a
 	github.com/cosmos/go-bip39 v0.0.0-20180819234021-555e2067c45d // indirect
 	github.com/elazarl/goproxy v0.0.0-20191011121108-aa519ddbe484 // indirect
+	github.com/netcloth/netcloth-chain v1.0.9
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/pkg/errors v0.8.1
 	github.com/rakyll/statik v0.1.6 // indirect
