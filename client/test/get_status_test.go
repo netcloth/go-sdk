@@ -1,17 +1,18 @@
-package rpc
+package test
 
 import (
 	"testing"
 
+	"github.com/netcloth/go-sdk/client/rpc"
 	"github.com/netcloth/go-sdk/util"
 )
 
 var (
-	c RPCClient
+	c rpc.RPCClient
 )
 
 func TestMain(m *testing.M) {
-	c = NewClient("tcp://127.0.0.1:26657")
+	c = rpc.NewClient("tcp://127.0.0.1:26657")
 	m.Run()
 }
 

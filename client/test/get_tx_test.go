@@ -1,4 +1,4 @@
-package rpc
+package test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 )
 
 func TestClient_GetTx(t *testing.T) {
-	hash := "7854CD857E686550B679A9BF3118BDA7281A8B9979C215E0AEABACDA8C76B10B"
+	hash := "06CA852A1D6401BE7BE6EE3D402E2FF2B4432A4FDDCFD599535FB9BDFD5CED4E"
 	if res, err := c.GetTx(hash); err != nil {
 		t.Fatal(err)
 	} else {

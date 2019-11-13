@@ -1,15 +1,16 @@
-package keys
+package test
 
 import (
 	"testing"
 
-	"github.com/netcloth/go-sdk/config"
-
 	"github.com/stretchr/testify/assert"
+
+	"github.com/netcloth/go-sdk/config"
+	"github.com/netcloth/go-sdk/keys"
 )
 
 func TestNewKeyManager(t *testing.T) {
-	if km, err := NewKeyManager(config.KeyStoreFileAbsPath, config.KeyStorePasswd); err != nil {
+	if km, err := keys.NewKeyManager(config.KeyStoreFileAbsPath, config.KeyStorePasswd); err != nil {
 		t.Fatal(err)
 	} else {
 		msg := []byte("hello world")

@@ -9,6 +9,7 @@ require (
 	github.com/elazarl/goproxy v0.0.0-20191011121108-aa519ddbe484 // indirect
 	github.com/irisnet/irishub v0.15.5
 	github.com/netcloth/netcloth-chain v1.0.9
+	github.com/olebedev/config v0.0.0-20190528211619-364964f3a8e4
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/pkg/errors v0.8.1
 	github.com/rcrowley/go-metrics v0.0.0-20181016184325-3113b8401b8a // indirect

@@ -26,9 +26,10 @@ type nchClient struct {
 	tx.TxClient
 }
 
-func NewNCHClient() (nchClient, error) {
-	var fake nchClient
+func NewNCHClient(sdkConfigFileAbsPath string) (nchClient, error) {
+	config.Init(sdkConfigFileAbsPath)
 
+	var fake nchClient
 	km, err := keys.NewKeyManager(config.KeyStoreFileAbsPath, config.KeyStorePasswd)
 	if err != nil {
 		panic(err)
@@ -62,7 +63,9 @@ func NewNCHClient() (nchClient, error) {
 	return client, nil
 }
 
-func NewNCHTXClient() (tx.TxClient, error) {
+func NewNCHTXClient(sdkConfigFileAbsPath string) (tx.TxClient, error) {
+	config.Init(sdkConfigFileAbsPath)
+
 	km, err := keys.NewKeyManager(config.KeyStoreFileAbsPath, config.KeyStorePasswd)
 	if err != nil {
 		panic(err)
@@ -89,7 +92,9 @@ func NewNCHTXClient() (tx.TxClient, error) {
 	return client, nil
 }
 
-func NewNCHQueryClient() (lcd.LiteClient, error) {
+func NewNCHQueryClient(sdkConfigFileAbsPath string) (lcd.LiteClient, error) {
+	config.Init(sdkConfigFileAbsPath)
+
 	basicClient := basic.NewClient(config.LiteClientRpcEndpoint)
 	liteClient := lcd.NewClient(basicClient)
 	rpcClient := rpc.NewClient(config.RPCEndpoint) //TODO check release?

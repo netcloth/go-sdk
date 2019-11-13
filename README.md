@@ -31,7 +31,7 @@ Before start using API, you should construct a Key Manager to help sign the tran
 Wo provide follow construct functions to generate Key Mange(other keyManager will coming soon):
 
 ```go
-NewKeyStoreKeyManager(file string, auth string) (KeyManager, error)
+NewKeyManager(file string, auth string) (KeyManager, error)
 ```
 
 Examples:
@@ -39,9 +39,8 @@ Examples:
 for keyStore:
 
 ```go
-func TestNewKeyStoreKeyManager(t *testing.T) {
-	file := ks_1234567890.json
-	if km, err := NewKeyStoreKeyManager(file, "1234567890"); err != nil {
+func TestNewKeyManager(t *testing.T) {
+	if km, err := keys.NewKeyManager(config.KeyStoreFileAbsPath, config.KeyStorePasswd); err != nil {
 		t.Fatal(err)
 	} else {
 		msg := []byte("hello world")
@@ -50,7 +49,6 @@ func TestNewKeyStoreKeyManager(t *testing.T) {
 			t.Fatal(err)
 		}
 		t.Log(km.GetAddr().String())
-
 
 		assert.Equal(t, km.GetPrivKey().PubKey().VerifyBytes(msg, signature), true)
 	}
@@ -62,14 +60,9 @@ func TestNewKeyStoreKeyManager(t *testing.T) {
 ```go
 import (
 	"github.com/netcloth/go-sdk/client"
-	"github.com/netcloth/go-sdk/types"
 )
-var (
-	baseUrl, nodeUrl string
-	networkType = types.Alphanet
-)
-km, _ := keys.NewKeyStoreKeyManager("../keys/ks_1234567890.json", "1234567890")
-c, _ := client.NewNCHClient(baseUrl, nodeUrl, networkType, km)
+
+client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
 ```
 
 Note:

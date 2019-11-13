@@ -1,9 +1,11 @@
-package client
+package test
 
 import (
 	"encoding/hex"
 	"fmt"
 	"testing"
+
+	"github.com/netcloth/go-sdk/client"
 
 	"github.com/stretchr/testify/require"
 
@@ -14,7 +16,7 @@ import (
 )
 
 func TestNewNCHClient(t *testing.T) {
-	c, err := NewNCHClient()
+	c, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
 	if err != nil {
 		t.Fatal(err)
 	} else {

@@ -1,7 +1,9 @@
-package client
+package test
 
 import (
 	"testing"
+
+	"github.com/netcloth/go-sdk/client"
 
 	"github.com/stretchr/testify/require"
 
@@ -10,7 +12,7 @@ import (
 )
 
 func TestClient_SendToken(t *testing.T) {
-	c, err := NewNCHTXClient()
+	c, err := client.NewNCHTXClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
 	require.True(t, err == nil)
 
 	coins := []types.Coin{

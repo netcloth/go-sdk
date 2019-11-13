@@ -141,6 +141,8 @@ github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRW
 github.com/netcloth/netcloth-chain v1.0.9 h1:Ie6baKRPTwEmTsgANj5QLbbDwJvClNl+i49l0eZadN4=
 github.com/netcloth/netcloth-chain v1.0.9/go.mod h1:OPfjMm6mZtb8dyIZ4cxYPwCiOeqmiD3okA+wJAS28Ds=
 github.com/oklog/ulid v1.3.1/go.mod h1:CirwcVhetQ6Lv90oh/F+FBtV6XMibvdAFo93nm5qn4U=
+github.com/olebedev/config v0.0.0-20190528211619-364964f3a8e4 h1:JnVsYEQzhEcOspy6ngIYNF2u0h2mjkXZptzX0IzZQ4g=
+github.com/olebedev/config v0.0.0-20190528211619-364964f3a8e4/go.mod h1:RL5+WRxWTAXqqCi9i+eZlHrUtO7AQujUqWi+xMohmc4=
 github.com/onsi/ginkgo v1.6.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.7.0/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=
 github.com/onsi/ginkgo v1.10.2/go.mod h1:lLunBs/Ym6LB5Z9jYTR76FiuTmxDTDusOGeTQH+WWjE=

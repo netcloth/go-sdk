@@ -30,7 +30,7 @@ func (c *client) CIPALClaim(req cipal.IPALUserRequest, memo string, commit bool)
 		return result, err
 	}
 
-	amount := getCoin(accountBody.Result.Value.Coins, config.TxDefaultDenom)
+	amount := getCoin(accountBody.Result.Value.Coins, constants.TxDefaultDenom)
 
 	totalfee := sdk.NewInt(config.TxDefaultFeeAmount)
 	if amount.Amount.LT(totalfee) {
@@ -39,7 +39,7 @@ func (c *client) CIPALClaim(req cipal.IPALUserRequest, memo string, commit bool)
 
 	fee := sdk.Coins{
 		{
-			Denom:  config.TxDefaultDenom,
+			Denom:  constants.TxDefaultDenom,
 			Amount: sdk.NewInt(config.TxDefaultFeeAmount),
 		},
 	}
@@ -94,11 +94,11 @@ func (c *client) IPALClaim(moniker, website, details string, endpoints ipal.Endp
 		return result, err
 	}
 
-	if bond.Denom != config.TxDefaultDenom {
+	if bond.Denom != constants.TxDefaultDenom {
 		return result, err
 	}
 
-	amount := getCoin(accountBody.Result.Value.Coins, config.TxDefaultDenom)
+	amount := getCoin(accountBody.Result.Value.Coins, constants.TxDefaultDenom)
 
 	totalfee := sdk.NewInt(config.TxDefaultFeeAmount)
 	if amount.Amount.LT(totalfee.Add(bond.Amount)) {
@@ -107,7 +107,7 @@ func (c *client) IPALClaim(moniker, website, details string, endpoints ipal.Endp
 
 	fee := sdk.Coins{
 		{
-			Denom:  config.TxDefaultDenom,
+			Denom:  constants.TxDefaultDenom,
 			Amount: sdk.NewInt(config.TxDefaultFeeAmount),
 		},
 	}

@@ -39,11 +39,11 @@ func (c *client) SendToken(receiver string, coins []types.Coin, memo string, com
 	}
 
 	//  check balance is enough
-	amount := getCoin(accountBody.Result.Value.Coins, config.TxDefaultDenom)
+	amount := getCoin(accountBody.Result.Value.Coins, constants.TxDefaultDenom)
 
 	totalfee := sdk.NewInt(config.TxDefaultFeeAmount)
 	for _, val := range sdkCoins {
-		if val.Denom == config.TxDefaultDenom {
+		if val.Denom == constants.TxDefaultDenom {
 			totalfee = totalfee.Add(val.Amount)
 		}
 	}
@@ -54,7 +54,7 @@ func (c *client) SendToken(receiver string, coins []types.Coin, memo string, com
 
 	fee := sdk.Coins{
 		{
-			Denom:  config.TxDefaultDenom,
+			Denom:  constants.TxDefaultDenom,
 			Amount: sdk.NewInt(config.TxDefaultFeeAmount),
 		},
 	}

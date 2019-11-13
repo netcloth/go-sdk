@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/netcloth/go-sdk/client"
+
+	"github.com/stretchr/testify/require"
 
 	"github.com/netcloth/netcloth-chain/modules/auth"
 	"github.com/netcloth/netcloth-chain/modules/cipal"
@@ -21,7 +21,7 @@ const (
 )
 
 func Test_IPALClaim(t *testing.T) {
-	client, err := client.NewNCHClient()
+	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
 	require.True(t, err == nil)
 
 	bond := sdk.Coin{
@@ -40,7 +40,7 @@ func Test_IPALClaim(t *testing.T) {
 }
 
 func Test_CIPALClaim(t *testing.T) {
-	client, err := client.NewNCHClient()
+	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
 	require.True(t, err == nil)
 
 	expiration := time.Now().UTC().AddDate(0, 0, 1)

@@ -1,10 +1,12 @@
-package keys
+package test
 
 import (
 	"encoding/hex"
 	"fmt"
 	"strings"
 	"testing"
+
+	"github.com/netcloth/go-sdk/keys"
 
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
@@ -19,25 +21,25 @@ const (
 )
 
 func Test_UNCompressedPubKey2CompressedPubKey(t *testing.T) {
-	pubKeyBytes, err := UNCompressedPubKey2CompressedPubKey(uncompressedPubKey)
+	pubKeyBytes, err := keys.UNCompressedPubKey2CompressedPubKey(uncompressedPubKey)
 	require.True(t, err == nil)
 	require.Equal(t, compressedPubKey, fmt.Sprintf("%x", pubKeyBytes))
 }
 
 func Test_UNCompressedPubKey2Address(t *testing.T) {
-	addr, err := UNCompressedPubKey2Address(uncompressedPubKey)
+	addr, err := keys.UNCompressedPubKey2Address(uncompressedPubKey)
 	require.True(t, err == nil)
 	require.Equal(t, address, strings.ToLower(addr.String()))
 }
 
 func Test_UNCompressedPubKey2AddressBech32(t *testing.T) {
-	addr, err := UNCompressedPubKey2AddressBech32(uncompressedPubKey)
+	addr, err := keys.UNCompressedPubKey2AddressBech32(uncompressedPubKey)
 	require.True(t, err == nil)
 	require.Equal(t, addressBech32, addr)
 }
 
 func Test_PubKeyHexString2AddressBech32(t *testing.T) {
-	addr, err := PubKeyHexString2AddressBech32(compressedPubKey)
+	addr, err := keys.PubKeyHexString2AddressBech32(compressedPubKey)
 	require.True(t, err == nil)
 	require.Equal(t, addressBech32, addr)
 }
@@ -49,7 +51,7 @@ func Test_PubKey2AddressBech32(t *testing.T) {
 	var pk secp256k1.PubKeySecp256k1
 	copy(pk[:], pubKey)
 
-	addrBech32, err := PubKey2AddressBech32(pk)
+	addrBech32, err := keys.PubKey2AddressBech32(pk)
 	require.True(t, err == nil)
 	require.Equal(t, addressBech32, addrBech32)
 }
