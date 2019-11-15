@@ -26,12 +26,26 @@ require (
 
 ## Key Manager
 
-Before start using API, you should construct a Key Manager to help sign the transaction msg or verify signature. Key Manager is an Identity Manger to define who you are in the NCH
+Before start using API, you should have some accounts which have unch tokens. then exporting keysotre file by nchcli tool through command below:
+```cassandraql
+nchcli keys export <account_name>
 
-Wo provide follow construct functions to generate Key Mange(other keyManager will coming soon):
+Enter passphrase to decrypt your key:
+enter your passphrase of <account_name> account
+Enter passphrase to encrypt the exported key:
+enter passphrase to encrypt the keystore file which can be used to import keystore to sdk
+
+e.g.:
+nchcli keys export lucy
+
+```
+
+When you have a keystore file and corresponding passphrase, you should construct a Key Manager to help sign the transaction msg or verify signature. Key Manager is an Identity Manger to define who you are in the NCH
+
+We provide follow construct functions to generate Key Manager(other keyManager will coming soon):
 
 ```go
-NewKeyManager(file string, auth string) (KeyManager, error)
+NewKeyManager(keystoreFile string, passphrase string) (KeyManager, error)
 ```
 
 Examples:
