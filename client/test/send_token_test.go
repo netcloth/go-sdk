@@ -3,10 +3,9 @@ package test
 import (
 	"testing"
 
-	"github.com/netcloth/go-sdk/client"
-
 	"github.com/stretchr/testify/require"
 
+	"github.com/netcloth/go-sdk/client"
 	"github.com/netcloth/go-sdk/client/types"
 	"github.com/netcloth/go-sdk/util"
 )

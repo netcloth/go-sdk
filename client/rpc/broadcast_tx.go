@@ -1,10 +1,11 @@
 package rpc
 
 import (
-	itypes "github.com/netcloth/go-sdk/client/types"
-	"github.com/netcloth/go-sdk/constants"
 	"github.com/pkg/errors"
 	"github.com/tendermint/tendermint/types"
+
+	itypes "github.com/netcloth/go-sdk/client/types"
+	"github.com/netcloth/go-sdk/constants"
 )
 
 func (c *client) BroadcastTx(broadcastType string, tx types.Tx) (itypes.BroadcastTxResult, error) {

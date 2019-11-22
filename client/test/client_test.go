@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/netcloth/go-sdk/client"
-
 	"github.com/stretchr/testify/require"
 
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
+	"github.com/netcloth/go-sdk/client"
 	"github.com/netcloth/go-sdk/keys"
 	"github.com/netcloth/go-sdk/util"
 )

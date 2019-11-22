@@ -1,11 +1,11 @@
 package rpc
 
 import (
-	itypes "github.com/netcloth/go-sdk/client/types"
-
 	rpcclient "github.com/tendermint/tendermint/rpc/client"
 	ctypes "github.com/tendermint/tendermint/rpc/core/types"
 	"github.com/tendermint/tendermint/types"
+
+	itypes "github.com/netcloth/go-sdk/client/types"
 )
 
 type RPCClient interface {

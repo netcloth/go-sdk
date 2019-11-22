@@ -9,14 +9,19 @@ type LiteClient interface {
 
 	QueryIPALList() (IPALListBody, error)
 	QueryIPALChatServerEndpoints() ([]string, error)
+	QueryIPALEndpointsByType(endpointType string) ([]string, error)
 
 	QueryIPALByAddress(address string) (IPALBody, error)
 	QueryIPALByUNCompressedPubKey(uncompressedPubKey string) (IPALBody, error)
 	QueryIPALChatServerEndpointByUNCompressedPubKey(uncompressedPubKey string) (string, error)
+	QueryIPALChatServersEndpointByAddresses(addresses []string) (map[string]string, error)
+	QueryIPALsEndpointByAddressesByType(addresses []string, endpointType string) (map[string]string, error)
 
 	QueryCIPALByAddress(address string) (CIPALBody, error)
 	QueryCIPALByUNCompressedPubKey(uncompressedPubKey string) (CIPALBody, error)
 	QueryCIPALChatServerAddrByUNCompressedPubKey(uncompressedPubKey string) (string, error)
+	QueryCIPALChatServersAddrByUNCompressedPubKeys(uncompressedPubKey []string) (map[string]string, error)
+	QueryCIPALsAddrByUNCompressedPubKeysByType(uncompressedPubKey []string, endpointType string) (map[string]string, error)
 }
 
 type client struct {

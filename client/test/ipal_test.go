@@ -2,17 +2,13 @@ package test
 
 import (
 	"testing"
-	"time"
-
-	"github.com/netcloth/go-sdk/client"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/netcloth/netcloth-chain/modules/auth"
-	"github.com/netcloth/netcloth-chain/modules/cipal"
 	"github.com/netcloth/netcloth-chain/modules/ipal"
 	sdk "github.com/netcloth/netcloth-chain/types"
 
+	"github.com/netcloth/go-sdk/client"
 	"github.com/netcloth/go-sdk/util"
 )
 
@@ -39,24 +35,34 @@ func Test_IPALClaim(t *testing.T) {
 	}
 }
 
-func Test_CIPALClaim(t *testing.T) {
+func Test_IPALQuery(t *testing.T) {
+	liteClient, err := client.NewNCHQueryClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	require.True(t, err == nil)
+
+	if res, err := liteClient.QueryIPALByAddress("nch1f2h4shfaugqgmryg9wxjyu8ehhddc5yuh0t0fw"); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Log(util.ToJsonIgnoreErr(res))
+	}
+}
+
+func Test_QueryIPALChatServersEndpointByAddresses(t *testing.T) {
 	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
 	require.True(t, err == nil)
 
-	expiration := time.Now().UTC().AddDate(0, 0, 1)
-	adMsg := cipal.NewADParam(AccAddr, AccAddr, 6, expiration)
-	sigBytes, err := client.TxClient.SignBytes(adMsg.GetSignBytes())
-	if err != nil {
-		panic(err)
+	addrs := []string{0: "nch196mwu4e5l86t73rhw690xkfdagx6lkmkrxpsta", 1: "nch1f2h4shfaugqgmryg9wxjyu8ehhddc5yuh0t0fw"}
+	if res, err := client.QueryIPALChatServersEndpointByAddresses(addrs); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Log(util.ToJsonIgnoreErr(res))
 	}
+}
 
-	stdSig := auth.StdSignature{
-		PubKey:    client.TxClient.GetPrivKey().PubKey(),
-		Signature: sigBytes,
-	}
+func Test_IPALListQuery(t *testing.T) {
+	liteClient, err := client.NewNCHQueryClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	require.True(t, err == nil)
 
-	req := cipal.NewIPALUserRequest(AccAddr, AccAddr, 6, expiration, stdSig)
-	if res, err := client.CIPALClaim(req, "memo", false); err != nil {
+	if res, err := liteClient.QueryIPALList(); err != nil {
 		t.Fatal(err)
 	} else {
 		t.Log(util.ToJsonIgnoreErr(res))

@@ -3,12 +3,12 @@ package rpc
 import (
 	"encoding/hex"
 
+	abci "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/types"
+
 	"github.com/netcloth/netcloth-chain/modules/auth"
 
 	"github.com/netcloth/go-sdk/types/tx"
-
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/types"
 )
 
 type ResultTx struct {
