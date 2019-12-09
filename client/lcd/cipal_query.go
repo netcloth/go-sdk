@@ -75,7 +75,7 @@ func (c *client) QueryCIPALChatServerAddrByUNCompressedPubKey(uncompressedPubKey
 func Bech32AddrsFromUNCompressedPubKeys(uncompressedPubKeys []string) (bech32Addrs []string) {
 	for _, pubKey := range uncompressedPubKeys {
 		bech32Addr, err := keys.UNCompressedPubKey2AddressBech32(pubKey)
-		if err != nil {
+		if err == nil {
 			bech32Addrs = append(bech32Addrs, bech32Addr)
 		}
 	}
