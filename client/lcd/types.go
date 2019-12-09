@@ -10,6 +10,12 @@ const (
 )
 
 const (
-	EndpointTypeChat      = "1"
-	EndpointTypeGroupChat = "2"
+	EndpointTypeServerChat      = "1"
+	EndpointTypeClientChat      = "1"
+	EndpointTypeClientGroupChat = "2"
 )
+
+var ClientChatEndpointType2ServerChatEndpointType = map[string]string{
+	EndpointTypeClientChat:      EndpointTypeServerChat,
+	EndpointTypeClientGroupChat: EndpointTypeServerChat,
+}

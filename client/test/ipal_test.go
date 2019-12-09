@@ -64,7 +64,7 @@ func Test_QueryIPALsEndpointByAddressesByType(t *testing.T) {
 	require.True(t, err == nil)
 
 	addrs := []string{0: "nch196mwu4e5l86t73rhw690xkfdagx6lkmkrxpsta", 1: "nch1f2h4shfaugqgmryg9wxjyu8ehhddc5yuh0t0fw"}
-	if res, err := client.QueryIPALsEndpointByAddressesByType(addrs, lcd.EndpointTypeGroupChat); err != nil {
+	if res, err := client.QueryIPALsEndpointByAddressesByType(addrs, lcd.EndpointTypeClientGroupChat); err != nil {
 		t.Fatal(err)
 	} else {
 		t.Log(util.ToJsonIgnoreErr(res))

@@ -63,7 +63,7 @@ func (c *client) QueryCIPALChatServerAddrByUNCompressedPubKey(uncompressedPubKey
 	}
 
 	for _, serviceInfo := range cipalInfo.Result.ServiceInfos {
-		if serviceInfo.Type == EndpointTypeChat {
+		if ClientChatEndpointType2ServerChatEndpointType[serviceInfo.Type] == EndpointTypeServerChat {
 			return serviceInfo.Address, nil
 			break
 		}
@@ -101,12 +101,11 @@ func (c *client) QueryCIPALChatServersAddrByUNCompressedPubKeys(uncompressedPubK
 			result := make(map[string]string)
 			for _, cipal := range r.Result {
 				for _, si := range cipal.ServiceInfos {
-					if si.Type == EndpointTypeChat {
+					if ClientChatEndpointType2ServerChatEndpointType[si.Type] == EndpointTypeServerChat {
 						result[cipal.UserAddress] = si.Address
 						break
 					}
 				}
-
 			}
 			return result, nil
 		}
@@ -126,12 +125,11 @@ func (c *client) QueryCIPALsAddrByUNCompressedPubKeysByType(uncompressedPubKeys 
 			result := make(map[string]string)
 			for _, cipal := range r.Result {
 				for _, si := range cipal.ServiceInfos {
-					if si.Type == endpointType {
+					if ClientChatEndpointType2ServerChatEndpointType[si.Type] == ClientChatEndpointType2ServerChatEndpointType[endpointType] {
 						result[cipal.UserAddress] = si.Address
 						break
 					}
 				}
-
 			}
 			return result, nil
 		}

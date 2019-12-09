@@ -34,7 +34,7 @@ func (c *client) QueryIPALChatServerEndpoints() ([]string, error) {
 
 	for _, ipalInfo := range ipalList.Result {
 		for _, endpoint := range ipalInfo.Endpoints {
-			if endpoint.Type == EndpointTypeChat {
+			if endpoint.Type == EndpointTypeServerChat {
 				endpoints = append(endpoints, endpoint.Endpoint)
 				break
 			}

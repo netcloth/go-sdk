@@ -70,7 +70,7 @@ func (c *client) QueryIPALChatServerEndpointByUNCompressedPubKey(uncompressedPub
 	}
 
 	for _, endpoint := range ipalInfo.Result.Endpoints {
-		if endpoint.Type == EndpointTypeChat {
+		if endpoint.Type == EndpointTypeServerChat {
 			return endpoint.Endpoint, nil
 			break
 		}
@@ -103,7 +103,7 @@ func (c *client) QueryIPALChatServersEndpointByAddresses(addresses []string) (ma
 			result := make(map[string]string)
 			for _, sn := range r.Result {
 				for _, ep := range sn.Endpoints {
-					if ep.Type == EndpointTypeChat {
+					if ep.Type == EndpointTypeServerChat {
 						result[sn.OperatorAddress] = ep.Endpoint
 					}
 				}

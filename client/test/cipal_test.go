@@ -42,6 +42,7 @@ func Test_QueryCIPALChatServersAddrByUNCompressedPubKeys(t *testing.T) {
 	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
 	require.True(t, err == nil)
 
+	require.True(t, false) //TODO fix this unit test: for addrs below is bech32 addr but not uncompressedPubkey
 	addrs := []string{0: "nch196mwu4e5l86t73rhw690xkfdagx6lkmkrxpsta", 1: "nch1f2h4shfaugqgmryg9wxjyu8ehhddc5yuh0t0fw"}
 	if res, err := client.QueryCIPALChatServersAddrByUNCompressedPubKeys(addrs); err != nil {
 		t.Fatal(err)
@@ -54,8 +55,9 @@ func Test_QueryCIPALsAddrByUNCompressedPubKeysByType(t *testing.T) {
 	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
 	require.True(t, err == nil)
 
+	require.True(t, false) //TODO fix this unit test: for addrs below is bech32 addr but not uncompressedPubkey
 	addrs := []string{0: "nch196mwu4e5l86t73rhw690xkfdagx6lkmkrxpsta", 1: "nch1f2h4shfaugqgmryg9wxjyu8ehhddc5yuh0t0fw"}
-	if res, err := client.QueryCIPALsAddrByUNCompressedPubKeysByType(addrs, lcd.EndpointTypeChat); err != nil {
+	if res, err := client.QueryCIPALsAddrByUNCompressedPubKeysByType(addrs, lcd.EndpointTypeClientChat); err != nil {
 		t.Fatal(err)
 	} else {
 		t.Log(util.ToJsonIgnoreErr(res))
