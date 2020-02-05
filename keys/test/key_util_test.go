@@ -6,11 +6,17 @@ import (
 	"strings"
 	"testing"
 
+	btcsecp256k1 "github.com/btcsuite/btcd/btcec"
+
 	"github.com/netcloth/go-sdk/keys"
 
 	"github.com/tendermint/tendermint/crypto/secp256k1"
 
 	"github.com/stretchr/testify/require"
+
+	ethcrypto "github.com/ethereum/go-ethereum/crypto"
+
+	"github.com/tendermint/tendermint/crypto"
 )
 
 const (
@@ -54,4 +60,25 @@ func Test_PubKey2AddressBech32(t *testing.T) {
 	addrBech32, err := keys.PubKey2AddressBech32(pk)
 	require.True(t, err == nil)
 	require.Equal(t, addressBech32, addrBech32)
+}
+
+func Test_test(t *testing.T) {
+	h1 := ethcrypto.Keccak256([]byte("abc"))
+	h2 := crypto.Sha256([]byte("abc"))
+
+	t.Log(h1, h2)
+}
+
+func Test_1(t *testing.T) {
+	hash := crypto.Sha256([]byte("abdadfasdfadfc"))
+	pri, err := btcsecp256k1.NewPrivateKey(btcsecp256k1.S256())
+	t.Log(err)
+	sig, err := pri.Sign(hash)
+	t.Log(fmt.Sprintf("%x", sig.Serialize()))
+	t.Log(err)
+	sig1, err := btcsecp256k1.SignCompact(btcsecp256k1.S256(), pri, hash, true)
+	t.Log(fmt.Sprintf("%x", sig1))
+	sig2, err := btcsecp256k1.SignCompact(btcsecp256k1.S256(), pri, hash, false)
+	t.Log(fmt.Sprintf("%x", sig2))
+	t.Log(fmt.Sprintf("%d:%d:%d\n", len(sig.Serialize()), len(sig1), len(sig2)))
 }

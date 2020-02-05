@@ -22,6 +22,8 @@ type LiteClient interface {
 	QueryCIPALChatServerAddrByUNCompressedPubKey(uncompressedPubKey string) (string, error)
 	QueryCIPALChatServersAddrByUNCompressedPubKeys(uncompressedPubKey []string) (map[string]string, error)
 	QueryCIPALsAddrByUNCompressedPubKeysByType(uncompressedPubKey []string, endpointType string) (map[string]string, error)
+
+	QueryContractLog(txId string) []byte
 }
 
 type client struct {
