@@ -6,6 +6,10 @@ import (
 	"strings"
 	"testing"
 
+	sdk "github.com/netcloth/netcloth-chain/types"
+
+	"github.com/netcloth/netcloth-chain/hexutil"
+
 	btcsecp256k1 "github.com/btcsuite/btcd/btcec"
 
 	"github.com/netcloth/go-sdk/keys"
@@ -81,4 +85,11 @@ func Test_1(t *testing.T) {
 	sig2, err := btcsecp256k1.SignCompact(btcsecp256k1.S256(), pri, hash, false)
 	t.Log(fmt.Sprintf("%x", sig2))
 	t.Log(fmt.Sprintf("%d:%d:%d\n", len(sig.Serialize()), len(sig1), len(sig2)))
+
+	x, err := hexutil.Decode("2a6e636831787735396864307a74677a35366c6d307534716567336335767330726b6b72727775656e7072")
+	t.Log(fmt.Sprintf("%s\n", string(x)))
+	addr, err := sdk.AccAddressFromBech32("nch1xw59hd0ztgz56lm0u4qeg3c5vs0rkkrrwuenpr")
+
+	t.Log(hexutil.Encode(addr.Bytes()))
+
 }

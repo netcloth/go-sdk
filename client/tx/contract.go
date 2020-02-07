@@ -13,14 +13,14 @@ import (
 	sdk "github.com/netcloth/netcloth-chain/types"
 )
 
-func (c *client) ContractCall(to string, payload []byte, amount sdk.Coin, commit bool) (r types.BroadcastTxResult, err error) {
+func (c *client) ContractCall(contractBech32Addr string, payload []byte, amount sdk.Coin, commit bool) (r types.BroadcastTxResult, err error) {
 	var result types.BroadcastTxResult
 
 	from := c.KeyManager.GetAddr()
 
 	var contractAddr sdk.AccAddress
-	if to != "" {
-		contractAddr, err = sdk.AccAddressFromBech32(to)
+	if contractBech32Addr != "" {
+		contractAddr, err = sdk.AccAddressFromBech32(contractBech32Addr)
 		if err != nil {
 			return result, err
 		}

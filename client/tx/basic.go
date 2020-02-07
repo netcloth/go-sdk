@@ -15,7 +15,7 @@ type TxClient interface {
 	SendToken(receiver string, coins []types.Coin, memo string, commit bool) (types.BroadcastTxResult, error)
 	IPALClaim(Moniker, website, details string, endpoints ipal.Endpoints, bond sdk.Coin, commit bool) (types.BroadcastTxResult, error)
 	CIPALClaim(req cipal.IPALUserRequest, memo string, commit bool) (types.BroadcastTxResult, error)
-	ContractCall(to string, payload []byte, amount sdk.Coin, commit bool) (r types.BroadcastTxResult, err error)
+	ContractCall(contractBech32Addr string, payload []byte, amount sdk.Coin, commit bool) (r types.BroadcastTxResult, err error)
 }
 
 type client struct {

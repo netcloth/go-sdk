@@ -5,5 +5,5 @@ const (
 	TxBroadcastTypeAsync  = "async"
 	TxBroadcastTypeCommit = "commit"
 
-	TxDefaultDenom = "unch"
+	TxDefaultDenom = "pnch"
 )

@@ -1,36 +1,38 @@
 package lcd
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 )
 
 type (
+	ContractLog struct {
+		Height string `json:"height"`
+		Result VMLogs `json:"result"`
+	}
+
 	VMLogs struct {
 		Logs []VMLog `json:"logs"`
 	}
 
 	VMLog struct {
-		address          string   `json:"address"`
-		topics           []string `json:"topics"`
-		data             string   `json:"data"`
-		blockNumber      uint64   `json:"blockNumber"`
-		transactionHash  string   `json:"transactionHash"`
-		transactionIndex uint64   `json:"transactionIndex"`
-		blockHash        string   `json:"blockHash"`
-		logIndex         uint64   `json:"logIndex"`
-		removed          bool     `json:"removed"`
+		Address          string   `json:"address"`
+		Topics           []string `json:"topics"`
+		Data             string   `json:"data"`
+		BlockNumber      string   `json:"blockNumber"`
+		TransactionHash  string   `json:"transactionHash"`
+		TransactionIndex string   `json:"transactionIndex"`
+		BlockHash        string   `json:"blockHash"`
+		LogIndex         string   `json:"logIndex"`
+		Removed          bool     `json:"removed"`
 	}
 )
 
-func (l *VMLog) String() string {
-	return l.data
-}
+func (c *client) QueryContractLog(txId []byte) (ContractLog, error) {
+	var r ContractLog
 
-func (c *client) QueryContractLog(txId string) (VMLogs, error) {
-	var r VMLogs
-
-	if _, body, err := c.httpClient.Get(fmt.Sprintf(UriQueryContractLogs, txId), nil); err != nil {
+	if _, body, err := c.httpClient.Get(fmt.Sprintf(UriQueryContractLogs, hex.EncodeToString(txId)), nil); err != nil {
 		return r, err
 	} else {
 		if err := json.Unmarshal(body, &r); err != nil {

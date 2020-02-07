@@ -10,4 +10,4 @@ ChainID: "nch-prinet-sky"
 
 feeParams:
   TxDefaultGas: 200000
-  TxDefaultFeeAmount: 500000
+  TxDefaultFeeAmount: 500000000
