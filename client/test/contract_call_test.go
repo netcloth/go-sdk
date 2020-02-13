@@ -75,14 +75,17 @@ func Test_ContractQuery(t *testing.T) {
 }
 
 func Test_QueryContractEvents(t *testing.T) {
-	startBlockNum := int64(6978)
-	endBlockNum := int64(6980)
+	startBlockNum := int64(10400)
+	endBlockNum := int64(10509)
 
 	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
-	r, err := client.QueryContractEvents(contractBech32Addr, startBlockNum, endBlockNum)
+	res, err := client.QueryContractEvents(contractBech32Addr, startBlockNum, endBlockNum)
 	require.True(t, err == nil)
 
-	t.Log(r)
+	fmt.Println("result:")
+	for _, item := range res {
+		t.Log(item)
+	}
 }

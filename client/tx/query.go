@@ -21,7 +21,7 @@ func (c *client) QueryContractEvents(contractBech32Addr string, startBlockNum in
 		txs := blockResult.Block.Data.Txs
 		for _, tx := range txs {
 			txhash := crypto.Sha256(tx)
-			fmt.Println(fmt.Sprintf("----txhash: %x -----", txhash))
+			fmt.Println(fmt.Sprintf("block %d, txhash: %x", i, txhash))
 
 			if res, err := c.rpcClient.GetTx(hex.EncodeToString(txhash)); err == nil {
 				msg := res.Tx.Msgs[0]
