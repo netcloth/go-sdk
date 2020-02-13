@@ -9,8 +9,8 @@ import (
 
 type (
 	MsgDeleteResult struct {
-		from      string
-		pubKey    string
+		from string
+		//pubKey    string
 		to        string
 		timestamp int64
 	}
