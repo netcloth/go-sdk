@@ -3,6 +3,7 @@ package test
 import (
 	"encoding/base64"
 	"fmt"
+	"strconv"
 	"testing"
 
 	"github.com/netcloth/go-sdk/client"
@@ -22,7 +23,7 @@ const (
 	v              = "1100000000000000000000000000000000000000000000000000000000000001"
 
 	// contract address
-	contractBech32Addr = "nch13knspgmg4gyf3htyumxpemcekvpk53klr4d3pd"
+	contractBech32Addr = "nch14stkx5uey0dvu8gfjpyu76e8esqyknhgvj3z29"
 
 	/*
 		第一个%s和第二个%s是地址的二进制，如果是bech32地址需要先转为二进制的地址即[20]byte类型，再按照二进制的字符串形式打印成40个字符的字符串
@@ -69,7 +70,7 @@ func Test_ContractCall(t *testing.T) {
 	}
 }
 
-const txHash = "7DE39FE2863FFFBE95D8EE915E8FA5F42D7441A91610832A323423676C889690"
+const txHash = "D2FCE43CE90D676F8E42E52D581EDE05BB1A30D5ECA14316B629B6544CE0BF40"
 
 func Test_ContractQuery(t *testing.T) {
 	client, err := client.NewNCHClient(yaml_path)
@@ -81,33 +82,64 @@ func Test_ContractQuery(t *testing.T) {
 
 	t.Log(r.Result.Logs[0].Data)
 
+	item := r.Result.Logs[0].Data
+
+	s, _ := base64.StdEncoding.DecodeString(item)
+	fmt.Println(fmt.Sprintf("%d, %x", len(s), s))
+
+	// 第一个byte32为from地址
+	a := fmt.Sprintf("%x", s[12:32])
+	// 第二个byte32为to地址
+	b := fmt.Sprintf("%x", s[44:64])
+	// 为int64类型的timestame
+	c := fmt.Sprintf("%x", s[65:96])
+
+	// 输出
+	accA, _ := sdk.AccAddressFromHex(a)
+	fmt.Println(fmt.Sprintf("%s --> %s", a, accA.String()))
+
+	accB, _ := sdk.AccAddressFromHex(b)
+	fmt.Println(fmt.Sprintf("%s --> %s", b, accB.String()))
+
+	timestamp, _ := strconv.ParseUint(c, 16, 64)
+	fmt.Println(fmt.Sprintf("%s --> %d", c, timestamp))
+
 }
 
 func Test_QueryContractEvents(t *testing.T) {
-	// query events of block [start, end]
-	startBlockNum := int64(13736)
-	endBlockNum := int64(13737)
+	// 遍历 [start, end] 之间的区块
+	startBlockNum := int64(13886)
+	endBlockNum := int64(13887)
 
 	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
+	// 查询合约相关的事件
 	res, err := client.QueryContractEvents(contractBech32Addr, startBlockNum, endBlockNum)
 	require.True(t, err == nil)
 
-	// unpack event data with abi
+	// 根据abi，解析出事件的data
 	fmt.Println("result:")
 	for _, item := range res {
 		s, _ := base64.StdEncoding.DecodeString(item)
 		fmt.Println(fmt.Sprintf("%d, %x", len(s), s))
 
+		// 第一个byte32为from地址
 		a := fmt.Sprintf("%x", s[12:32])
+		// 第二个byte32为to地址
 		b := fmt.Sprintf("%x", s[44:64])
+		// 为int64类型的timestame
+		c := fmt.Sprintf("%x", s[65:96])
 
+		// 输出
 		accA, _ := sdk.AccAddressFromHex(a)
-		fmt.Println(accA.String())
+		fmt.Println(fmt.Sprintf("%s --> %s", a, accA.String()))
 
 		accB, _ := sdk.AccAddressFromHex(b)
-		fmt.Println(accB.String())
+		fmt.Println(fmt.Sprintf("%s --> %s", b, accB.String()))
+
+		timestamp, _ := strconv.ParseUint(c, 16, 64)
+		fmt.Println(fmt.Sprintf("%s --> %d", c, timestamp))
 
 		t.Log(item)
 	}
