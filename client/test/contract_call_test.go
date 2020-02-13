@@ -1,6 +1,7 @@
 package test
 
 import (
+	"encoding/base64"
 	"fmt"
 	"testing"
 
@@ -12,6 +13,7 @@ import (
 )
 
 const (
+	// contract args
 	fromBech32Addr = "nch13f5tmt88z5lkx8p45hv7a327nc0tpjzlwsq35e"
 	toBech32Addr   = "nch1zypvh2q606ztw4elfgla0p6x4eruz3md6euv2t"
 	timestamp      = 1581065043
@@ -19,15 +21,19 @@ const (
 	s              = "1100000000000000000000000000000000000000000000000000000000000001"
 	v              = "1100000000000000000000000000000000000000000000000000000000000001"
 
-	contractBech32Addr = "nch17awtgfpq30xgzs5eld93pev5u588yvmqpruv3s"
-	payloadTemplate1   = "0xfc6a54a80000000000000000000000000dd023d5c543054c8612a2291b647c32d5714f510000000000000000000000000dd023d5c543054c8612a2291b647c32d5714f510000000000000000000000000000000000000000000000000000000000000001100000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000020300000000000000000000000000000000000000000000000000000000000000"
+	// contract address
+	contractBech32Addr = "nch13knspgmg4gyf3htyumxpemcekvpk53klr4d3pd"
 
 	/*
 		第一个%s和第二个%s是地址的二进制，如果是bech32地址需要先转为二进制的地址即[20]byte类型，再按照二进制的字符串形式打印成40个字符的字符串
 		%064x是时间戳
 		最后3个%s是签名的r，s，v的二进制字符串
 	*/
-	payloadTemplate = "0xfc6a54a80000000000000000000000000%s0000000000000000000000000%s%064x%s%s%s"
+
+	addressPadZeros = "000000000000000000000000"
+
+	// fc6a54a8 is Recall function signature
+	payloadTemplate = "fc6a54a8%s%s%064x%s%s%s"
 )
 
 var (
@@ -41,12 +47,16 @@ func Test_ContractCall(t *testing.T) {
 	fromAddrBin, err := sdk.AccAddressFromBech32(fromBech32Addr)
 	require.True(t, err == nil)
 	fromAddrStr := hexutil.Encode(fromAddrBin.Bytes())
+	//fmt.Println(fmt.Sprintf("%x", fromAddrBin.Bytes()))
+	//fmt.Println(fromAddrStr)
 
 	toAddrBin, err := sdk.AccAddressFromBech32(toBech32Addr)
 	require.True(t, err == nil)
 	toAddrStr := hexutil.Encode(toAddrBin)
+	//fmt.Println(fmt.Sprintf("%x", toAddrBin.Bytes()))
+	//fmt.Println(toAddrStr)
 
-	payloadStr := fmt.Sprintf(payloadTemplate, fromAddrStr, toAddrStr, timestamp, r, s, v)
+	payloadStr := fmt.Sprintf(payloadTemplate, addressPadZeros+fromAddrStr, addressPadZeros+toAddrStr, timestamp, r, s, v)
 	t.Log(payloadStr)
 	payload, err := hexutil.Decode(payloadStr)
 	require.True(t, err == nil)
@@ -57,11 +67,9 @@ func Test_ContractCall(t *testing.T) {
 	} else {
 		t.Log(util.ToJsonIgnoreErr(res))
 	}
-
-	//txId := res.CommitResult.Hash
 }
 
-const txHash = "89A5480747829A680437B663C7681DE1C2E7869D3031B37D3136CF4330201B2E"
+const txHash = "7DE39FE2863FFFBE95D8EE915E8FA5F42D7441A91610832A323423676C889690"
 
 func Test_ContractQuery(t *testing.T) {
 	client, err := client.NewNCHClient(yaml_path)
@@ -72,11 +80,13 @@ func Test_ContractQuery(t *testing.T) {
 	require.True(t, err == nil)
 
 	t.Log(r.Result.Logs[0].Data)
+
 }
 
 func Test_QueryContractEvents(t *testing.T) {
-	startBlockNum := int64(10400)
-	endBlockNum := int64(10509)
+	// query events of block [start, end]
+	startBlockNum := int64(13736)
+	endBlockNum := int64(13737)
 
 	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
@@ -84,8 +94,21 @@ func Test_QueryContractEvents(t *testing.T) {
 	res, err := client.QueryContractEvents(contractBech32Addr, startBlockNum, endBlockNum)
 	require.True(t, err == nil)
 
+	// unpack event data with abi
 	fmt.Println("result:")
 	for _, item := range res {
+		s, _ := base64.StdEncoding.DecodeString(item)
+		fmt.Println(fmt.Sprintf("%d, %x", len(s), s))
+
+		a := fmt.Sprintf("%x", s[12:32])
+		b := fmt.Sprintf("%x", s[44:64])
+
+		accA, _ := sdk.AccAddressFromHex(a)
+		fmt.Println(accA.String())
+
+		accB, _ := sdk.AccAddressFromHex(b)
+		fmt.Println(accB.String())
+
 		t.Log(item)
 	}
 }
