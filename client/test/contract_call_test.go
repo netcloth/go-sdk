@@ -12,14 +12,14 @@ import (
 )
 
 const (
-	fromBech32Addr = "nch1yclzyuya2usepg80md5d6mrqypr8mhk3gl5a7x"
-	toBech32Addr   = "nch1yclzyuya2usepg80md5d6mrqypr8mhk3gl5a7x"
+	fromBech32Addr = "nch13f5tmt88z5lkx8p45hv7a327nc0tpjzlwsq35e"
+	toBech32Addr   = "nch1zypvh2q606ztw4elfgla0p6x4eruz3md6euv2t"
 	timestamp      = 1581065043
 	r              = "1100000000000000000000000000000000000000000000000000000000000001"
 	s              = "1100000000000000000000000000000000000000000000000000000000000001"
 	v              = "1100000000000000000000000000000000000000000000000000000000000001"
 
-	contractBech32Addr = "nch1yclzyuya2usepg80md5d6mrqypr8mhk3gl5a7x"
+	contractBech32Addr = "nch17awtgfpq30xgzs5eld93pev5u588yvmqpruv3s"
 	payloadTemplate1   = "0xfc6a54a80000000000000000000000000dd023d5c543054c8612a2291b647c32d5714f510000000000000000000000000dd023d5c543054c8612a2291b647c32d5714f510000000000000000000000000000000000000000000000000000000000000001100000000000000000000000000000000000000000000000000000000000000120000000000000000000000000000000000000000000000000000000000000020300000000000000000000000000000000000000000000000000000000000000"
 
 	/*
@@ -35,7 +35,7 @@ var (
 )
 
 func Test_ContractCall(t *testing.T) {
-	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
 	fromAddrBin, err := sdk.AccAddressFromBech32(fromBech32Addr)
@@ -61,13 +61,28 @@ func Test_ContractCall(t *testing.T) {
 	//txId := res.CommitResult.Hash
 }
 
+const txHash = "89A5480747829A680437B663C7681DE1C2E7869D3031B37D3136CF4330201B2E"
+
 func Test_ContractQuery(t *testing.T) {
-	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
-	txId, err := hexutil.Decode("d6063cf0ac432a27645f9defb75747fd3cd7e6157f5c4e23b8de0898c2571f50")
+	txId, err := hexutil.Decode(txHash)
 	r, err := client.QueryContractLog(txId)
 	require.True(t, err == nil)
 
 	t.Log(r.Result.Logs[0].Data)
+}
+
+func Test_QueryContractEvents(t *testing.T) {
+	startBlockNum := int64(7010)
+	endBlockNum := int64(7015)
+
+	client, err := client.NewNCHClient(yaml_path)
+	require.True(t, err == nil)
+
+	r, err := client.QueryContractEvents(contractBech32Addr, startBlockNum, endBlockNum)
+	require.True(t, err == nil)
+
+	t.Log(r)
 }

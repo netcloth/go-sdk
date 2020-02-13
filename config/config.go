@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	DefautlKeyStoreFileAbsPath   = "/Users/sky/go/src/github.com/netcloth/go-sdk/config/keystore"
+	DefautlKeyStoreFileAbsPath   = "/Users/zhuliting/go/nch-sdk/config/keystore"
 	DefaultKeyStorePasswd        = "12345678"
 	DefaultLiteClientRpcEndpoint = "http://127.0.0.1:1317"
 	DefaultRPCEndpoint           = "http://127.0.0.1:26657"
-	DefaultChainID               = "nch-prinet-sky"
+	DefaultChainID               = "nch-chain"
 	DefaultTxDefaultGas          = uint64(200000)
 	DefaultTxDefaultFeeAmount    = int64(500000)
 )
