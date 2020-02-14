@@ -31,22 +31,40 @@ const (
 	contractBech32Addr = "nch1kuzlpyesw7vuh65dlpdvy5j5q5hmhygvw73f2p"
 	contractAbi        = `[{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"},{"indexed":false,"internalType":"int64","name":"pk","type":"int64"}],"name":"Recall","type":"event"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"int64","name":"r","type":"int64"},{"internalType":"int64","name":"s","type":"int64"}],"name":"ecrecoverDecode","outputs":[{"internalType":"address","name":"addr","type":"address"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"address","name":"from","type":"address"}],"name":"queryParams","outputs":[{"internalType":"int64","name":"pubkey","type":"int64"},{"internalType":"uint256","name":"timestamp","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"int64","name":"pk","type":"int64"},{"internalType":"int64","name":"r","type":"int64"},{"internalType":"int64","name":"s","type":"int64"}],"name":"recall","outputs":[],"stateMutability":"nonpayable","type":"function"}]`
 	/*
-		    function recall(address from, address to, uint timestamp, bytes32 pubkey, byte t, bytes32 r, bytes32 s, byte v) public {
+		合约代码参考：
+			function recall(address from, address to, uint timestamp, int64 pk, int64 r, int64 s) public {
 			from 和to 是地址的二进制，如果是bech32地址需要先转为二进制的地址即[20]byte类型，再按照二进制的字符串形式打印成40个字符的字符串
 			timestamp是时间戳，需要填充为32字节
 			pubkey为公钥，需要填充为32字节
 			r，s为签名
 	*/
 
+	// 地址20个字节，构造bytes32需要再填充12个字节的0
 	addressPadZeros = "000000000000000000000000"
 
-	// fc6a54a8 is recall function signature
+	// recall 函数参数
 	payloadTemplate = "%s%s%064x%064x%064x%064x"
 )
 
 var (
 	amount = sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(0))
 )
+
+type MsgDeleteResult struct {
+	from      string `json:"from" yaml:"from"`
+	to        string `json:"to" yaml:"to"`
+	pubkey    uint64 `json:"pubkey" yaml:"pubkey"`
+	timestamp uint64 `json:"timestamp" yaml:"timestamp"`
+}
+
+func (res MsgDeleteResult) String() string {
+	return fmt.Sprintf(
+		`
+from: %s
+to: %s
+pubkey: %d
+timestamp: %d`, res.from, res.to, res.pubkey, res.timestamp)
+}
 
 func Test_ContractCall(t *testing.T) {
 	client, err := client.NewNCHClient(yaml_path)
@@ -56,12 +74,12 @@ func Test_ContractCall(t *testing.T) {
 	require.True(t, err == nil)
 	fromAddrStr := hexutil.Encode(fromAddrBin.Bytes())
 	//fmt.Println(fmt.Sprintf("%x", fromAddrBin.Bytes()))
-	//fmt.Println(fromAddrStr)
 
 	toAddrBin, err := sdk.AccAddressFromBech32(toBech32Addr)
 	require.True(t, err == nil)
 	toAddrStr := hexutil.Encode(toAddrBin.Bytes())
 
+	// 构造合约的payload
 	payloadStr := fmt.Sprintf(payloadTemplate, addressPadZeros+fromAddrStr, addressPadZeros+toAddrStr, timestamp, pubKey, r, s)
 	//fmt.Println(fmt.Sprintf("payload:         %s ", payloadStr))
 	argsBinary, err := hex.DecodeString(payloadStr)
@@ -100,12 +118,10 @@ func Test_ContractQuery(t *testing.T) {
 	s, _ := base64.StdEncoding.DecodeString(item)
 	fmt.Println(fmt.Sprintf("%d, %x", len(s), s))
 
-	// 第一个byte32为from地址
 	a := fmt.Sprintf("%x", s[12:32])
-	// 第二个byte32为to地址
 	b := fmt.Sprintf("%x", s[44:64])
-	// 为int64类型的timestame
 	c := fmt.Sprintf("%x", s[64:96])
+	d := fmt.Sprintf("%x", s[96:128])
 
 	// address - from
 	accA, _ := sdk.AccAddressFromHex(a)
@@ -120,16 +136,14 @@ func Test_ContractQuery(t *testing.T) {
 	fmt.Println(fmt.Sprintf("%s --> %d", c, timestamp))
 
 	// int64 - public key
-	d := fmt.Sprintf("%x", s[96:128])
 	pk, _ := strconv.ParseUint(d, 16, 64)
 	fmt.Println(fmt.Sprintf("%s --> %d", d, pk))
-
 }
 
 func Test_QueryContractEvents(t *testing.T) {
 	// 遍历 [start, end] 之间的区块
-	startBlockNum := int64(6289)
-	endBlockNum := int64(6290)
+	startBlockNum := int64(6280)
+	endBlockNum := int64(6470)
 
 	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
@@ -139,10 +153,11 @@ func Test_QueryContractEvents(t *testing.T) {
 	require.True(t, err == nil)
 
 	// 根据abi，解析出事件的data
-	fmt.Println("result:")
+	var results []MsgDeleteResult
 	for _, item := range res {
+		var result MsgDeleteResult
+
 		s, _ := base64.StdEncoding.DecodeString(item)
-		fmt.Println(fmt.Sprintf("%d, %x", len(s), s))
 
 		// 第一个byte32为from地址
 		a := fmt.Sprintf("%x", s[12:32])
@@ -150,24 +165,26 @@ func Test_QueryContractEvents(t *testing.T) {
 		b := fmt.Sprintf("%x", s[44:64])
 		// 为int64类型的timestame
 		c := fmt.Sprintf("%x", s[64:96])
+		// pubkey
+		d := fmt.Sprintf("%x", s[96:128])
 
 		// address - from
 		accA, _ := sdk.AccAddressFromHex(a)
-		fmt.Println(fmt.Sprintf("%s --> %s", a, accA.String()))
-
 		// address - to
 		accB, _ := sdk.AccAddressFromHex(b)
-		fmt.Println(fmt.Sprintf("%s --> %s", b, accB.String()))
-
 		// uint - timestamp
 		timestamp, _ := strconv.ParseUint(c, 16, 64)
-		fmt.Println(fmt.Sprintf("%s --> %d", c, timestamp))
-
 		// int64 - public key
-		d := fmt.Sprintf("%x", s[96:128])
 		pk, _ := strconv.ParseUint(d, 16, 64)
-		fmt.Println(fmt.Sprintf("%s --> %d", d, pk))
+
+		result.from = accA.String()
+		result.to = accB.String()
+		result.pubkey = pk
+		result.timestamp = timestamp
+		results = append(results, result)
 
 		t.Log(item)
 	}
+
+	fmt.Println(results)
 }
