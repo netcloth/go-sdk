@@ -17,23 +17,26 @@ const (
 	// contract args
 	fromBech32Addr = "nch13f5tmt88z5lkx8p45hv7a327nc0tpjzlwsq35e"
 	toBech32Addr   = "nch1zypvh2q606ztw4elfgla0p6x4eruz3md6euv2t"
+	pubKey         = "1100000000000000000000000000000000000000000000000000000000000001"
 	timestamp      = 1581065043
 	r              = "1100000000000000000000000000000000000000000000000000000000000001"
 	s              = "1100000000000000000000000000000000000000000000000000000000000001"
-	v              = "1100000000000000000000000000000000000000000000000000000000000001"
 
 	// contract address
-	contractBech32Addr = "nch14stkx5uey0dvu8gfjpyu76e8esqyknhgvj3z29"
+	contractBech32Addr = "nch1vdm60zm5jr5yn3aj0dkfkghf23x4t2yw9y2j4f"
 
 	/*
-		第一个%s和第二个%s是地址的二进制，如果是bech32地址需要先转为二进制的地址即[20]byte类型，再按照二进制的字符串形式打印成40个字符的字符串
-		%064x是时间戳
-		最后3个%s是签名的r，s，v的二进制字符串
+		    function recall(address from, address to, uint timestamp, bytes32 pubkey, byte t, bytes32 r, bytes32 s, byte v) public {
+			from 和to 是地址的二进制，如果是bech32地址需要先转为二进制的地址即[20]byte类型，再按照二进制的字符串形式打印成40个字符的字符串
+			timestamp是时间戳，需要填充为32字节
+			pubkey为公钥，需要填充为32字节
+			pubKeyType为公钥类型，1表示个人，2表示群,需要填充为32字节
+			最后3个%s是签名的r，s的二进制字符串
 	*/
 
 	addressPadZeros = "000000000000000000000000"
 
-	// fc6a54a8 is Recall function signature
+	// fc6a54a8 is recall function signature
 	payloadTemplate = "fc6a54a8%s%s%064x%s%s%s"
 )
 
@@ -57,7 +60,8 @@ func Test_ContractCall(t *testing.T) {
 	//fmt.Println(fmt.Sprintf("%x", toAddrBin.Bytes()))
 	//fmt.Println(toAddrStr)
 
-	payloadStr := fmt.Sprintf(payloadTemplate, addressPadZeros+fromAddrStr, addressPadZeros+toAddrStr, timestamp, r, s, v)
+	payloadStr := fmt.Sprintf(payloadTemplate, addressPadZeros+fromAddrStr, addressPadZeros+toAddrStr, timestamp, pubKey, r, s)
+
 	t.Log(payloadStr)
 	payload, err := hexutil.Decode(payloadStr)
 	require.True(t, err == nil)
@@ -70,7 +74,7 @@ func Test_ContractCall(t *testing.T) {
 	}
 }
 
-const txHash = "D2FCE43CE90D676F8E42E52D581EDE05BB1A30D5ECA14316B629B6544CE0BF40"
+const txHash = "EA5D94E02EF77AF61D3CEA6056348D1E400C0728E059EB57F3D8A3E896390427"
 
 func Test_ContractQuery(t *testing.T) {
 	client, err := client.NewNCHClient(yaml_path)
@@ -82,34 +86,40 @@ func Test_ContractQuery(t *testing.T) {
 
 	t.Log(r.Result.Logs[0].Data)
 
-	item := r.Result.Logs[0].Data
+	/*
+		item := r.Result.Logs[0].Data
+		s, _ := base64.StdEncoding.DecodeString(item)
+		fmt.Println(fmt.Sprintf("%d, %x", len(s), s))
 
-	s, _ := base64.StdEncoding.DecodeString(item)
-	fmt.Println(fmt.Sprintf("%d, %x", len(s), s))
+		// 第一个byte32为from地址
+		a := fmt.Sprintf("%x", s[12:32])
+		// 第二个byte32为to地址
+		b := fmt.Sprintf("%x", s[44:64])
+		// 为int64类型的timestame
+		c := fmt.Sprintf("%x", s[64:96])
 
-	// 第一个byte32为from地址
-	a := fmt.Sprintf("%x", s[12:32])
-	// 第二个byte32为to地址
-	b := fmt.Sprintf("%x", s[44:64])
-	// 为int64类型的timestame
-	c := fmt.Sprintf("%x", s[65:96])
+		d := fmt.Sprintf("%x", s[96:128])
 
-	// 输出
-	accA, _ := sdk.AccAddressFromHex(a)
-	fmt.Println(fmt.Sprintf("%s --> %s", a, accA.String()))
+		//e ;= fmt.Sprintf("%x", s[128:])
 
-	accB, _ := sdk.AccAddressFromHex(b)
-	fmt.Println(fmt.Sprintf("%s --> %s", b, accB.String()))
+		// 输出
+		accA, _ := sdk.AccAddressFromHex(a)
+		fmt.Println(fmt.Sprintf("%s --> %s", a, accA.String()))
 
-	timestamp, _ := strconv.ParseUint(c, 16, 64)
-	fmt.Println(fmt.Sprintf("%s --> %d", c, timestamp))
+		accB, _ := sdk.AccAddressFromHex(b)
+		fmt.Println(fmt.Sprintf("%s --> %s", b, accB.String()))
 
+		timestamp, _ := strconv.ParseUint(c, 16, 64)
+		fmt.Println(fmt.Sprintf("%s --> %d", c, timestamp))
+
+		fmt.Println(fmt.Sprintf("%s --> %s", d, d))
+	*/
 }
 
 func Test_QueryContractEvents(t *testing.T) {
 	// 遍历 [start, end] 之间的区块
-	startBlockNum := int64(13886)
-	endBlockNum := int64(13887)
+	startBlockNum := int64(1287)
+	endBlockNum := int64(1289)
 
 	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
@@ -129,7 +139,9 @@ func Test_QueryContractEvents(t *testing.T) {
 		// 第二个byte32为to地址
 		b := fmt.Sprintf("%x", s[44:64])
 		// 为int64类型的timestame
-		c := fmt.Sprintf("%x", s[65:96])
+		c := fmt.Sprintf("%x", s[64:96])
+		// pubkey
+		d := fmt.Sprintf("%x", s[96:128])
 
 		// 输出
 		accA, _ := sdk.AccAddressFromHex(a)
@@ -140,6 +152,8 @@ func Test_QueryContractEvents(t *testing.T) {
 
 		timestamp, _ := strconv.ParseUint(c, 16, 64)
 		fmt.Println(fmt.Sprintf("%s --> %d", c, timestamp))
+
+		fmt.Println(fmt.Sprintf("%s --> %s", d, d))
 
 		t.Log(item)
 	}
