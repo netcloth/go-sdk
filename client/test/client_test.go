@@ -15,7 +15,7 @@ import (
 )
 
 func TestNewNCHClient(t *testing.T) {
-	c, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	c, err := client.NewNCHClient(yaml_path)
 	if err != nil {
 		t.Fatal(err)
 	} else {

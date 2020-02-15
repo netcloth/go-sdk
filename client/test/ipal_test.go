@@ -18,7 +18,7 @@ const (
 )
 
 func Test_IPALClaim(t *testing.T) {
-	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
 	bond := sdk.Coin{
@@ -37,7 +37,7 @@ func Test_IPALClaim(t *testing.T) {
 }
 
 func Test_IPALQuery(t *testing.T) {
-	liteClient, err := client.NewNCHQueryClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	liteClient, err := client.NewNCHQueryClient(yaml_path)
 	require.True(t, err == nil)
 
 	if res, err := liteClient.QueryIPALByAddress("nch1f2h4shfaugqgmryg9wxjyu8ehhddc5yuh0t0fw"); err != nil {
@@ -48,7 +48,7 @@ func Test_IPALQuery(t *testing.T) {
 }
 
 func Test_QueryIPALChatServersEndpointByAddresses(t *testing.T) {
-	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
 	addrs := []string{0: "nch196mwu4e5l86t73rhw690xkfdagx6lkmkrxpsta", 1: "nch1f2h4shfaugqgmryg9wxjyu8ehhddc5yuh0t0fw"}
@@ -60,7 +60,7 @@ func Test_QueryIPALChatServersEndpointByAddresses(t *testing.T) {
 }
 
 func Test_QueryIPALsEndpointByAddressesByType(t *testing.T) {
-	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
 	addrs := []string{0: "nch196mwu4e5l86t73rhw690xkfdagx6lkmkrxpsta", 1: "nch1f2h4shfaugqgmryg9wxjyu8ehhddc5yuh0t0fw"}
@@ -72,7 +72,7 @@ func Test_QueryIPALsEndpointByAddressesByType(t *testing.T) {
 }
 
 func Test_IPALListQuery(t *testing.T) {
-	liteClient, err := client.NewNCHQueryClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	liteClient, err := client.NewNCHQueryClient(yaml_path)
 	require.True(t, err == nil)
 
 	if res, err := liteClient.QueryIPALList(); err != nil {

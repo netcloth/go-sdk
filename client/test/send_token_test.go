@@ -11,12 +11,12 @@ import (
 )
 
 func TestClient_SendToken(t *testing.T) {
-	c, err := client.NewNCHTXClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	c, err := client.NewNCHTXClient(yaml_path)
 	require.True(t, err == nil)
 
 	coins := []types.Coin{
 		{
-			Denom:  "unch",
+			Denom:  "pnch",
 			Amount: "100",
 		},
 	}

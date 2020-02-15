@@ -30,15 +30,15 @@ type (
 )
 
 func (c *client) QueryContractLog(txId []byte) (ContractLog, error) {
-	var r ContractLog
+	var res ContractLog
 
 	if _, body, err := c.httpClient.Get(fmt.Sprintf(UriQueryContractLogs, hex.EncodeToString(txId)), nil); err != nil {
-		return r, err
+		return res, err
 	} else {
-		if err := json.Unmarshal(body, &r); err != nil {
-			return r, err
+		if err := json.Unmarshal(body, &res); err != nil {
+			return res, err
 		} else {
-			return r, nil
+			return res, nil
 		}
 	}
 }

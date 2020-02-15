@@ -76,7 +76,7 @@ import (
 	"github.com/netcloth/go-sdk/client"
 )
 
-client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+client, err := client.NewNCHClient("/Users/zhuliting/go/nch-sdk/config/sdk.yaml")
 ```
 
 Note:

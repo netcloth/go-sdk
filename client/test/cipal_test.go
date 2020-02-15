@@ -15,7 +15,7 @@ import (
 )
 
 func Test_CIPALClaim(t *testing.T) {
-	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
 	expiration := time.Now().UTC().AddDate(0, 0, 1)
@@ -39,7 +39,7 @@ func Test_CIPALClaim(t *testing.T) {
 }
 
 func Test_QueryCIPALChatServersAddrByUNCompressedPubKeys(t *testing.T) {
-	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
 	require.True(t, false) //TODO fix this unit test: for addrs below is bech32 addr but not uncompressedPubkey
@@ -52,7 +52,7 @@ func Test_QueryCIPALChatServersAddrByUNCompressedPubKeys(t *testing.T) {
 }
 
 func Test_QueryCIPALsAddrByUNCompressedPubKeysByType(t *testing.T) {
-	client, err := client.NewNCHClient("/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml")
+	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
 	require.True(t, false) //TODO fix this unit test: for addrs below is bech32 addr but not uncompressedPubkey
