@@ -74,8 +74,14 @@ func Test_test(t *testing.T) {
 }
 
 func Test_1(t *testing.T) {
-	hash := crypto.Sha256([]byte("abdadfasdfadfc"))
+	hash := crypto.Sha256([]byte("abdadfasdfadfcd"))
+	hash1, err := hexutil.Decode("0xce0677bb30baa8cf067c88db9811f4333d131bf8bcf12fe7065d211dce971008")
+	t.Log(fmt.Sprintf("%x", hash1))
+	t.Log(fmt.Sprintf("%x", hash))
+
 	pri, err := btcsecp256k1.NewPrivateKey(btcsecp256k1.S256())
+	t.Log(fmt.Sprintf("%x", pri))
+	t.Log(fmt.Sprintf("%x", pri.D))
 	t.Log(err)
 	sig, err := pri.Sign(hash)
 	t.Log(fmt.Sprintf("%x", sig.Serialize()))
@@ -92,4 +98,33 @@ func Test_1(t *testing.T) {
 
 	t.Log(hexutil.Encode(addr.Bytes()))
 
+}
+
+func Test_2(t *testing.T) {
+	hash, err := hexutil.Decode("0xce0677bb30baa8cf067c88db9811f4333d131bf8bcf12fe7065d211dce971008")
+	t.Log(err)
+
+	pri, err := btcsecp256k1.NewPrivateKey(btcsecp256k1.S256())
+	pubkey := pri.PubKey()
+	t.Log(fmt.Sprintf("pri: %x", pri))
+	t.Log(fmt.Sprintf("pri.D %x", pri.D))
+	t.Log(fmt.Sprintf("pubkey c: %x", pubkey.SerializeCompressed()))
+	t.Log(fmt.Sprintf("pubkey uc: %x", pubkey.SerializeUncompressed()))
+
+	addr, err := keys.UNCompressedPubKey2Address(fmt.Sprintf("%x", pubkey.SerializeUncompressed()))
+	t.Log(fmt.Sprintf("addr = %v", addr))
+	t.Log(fmt.Sprintf("addr = %x", addr.Bytes()))
+	t.Log(fmt.Sprintf("addr = %s", addr.String()))
+
+	sig, err := pri.Sign(hash)
+	t.Log(fmt.Sprintf("sig: %x", sig.Serialize()))
+	t.Log(fmt.Sprintf("sig: %x", sig))
+
+	sig1, err := btcsecp256k1.SignCompact(btcsecp256k1.S256(), pri, hash, true)
+	t.Log(fmt.Sprintf("sig: %x", sig1))
+
+	sig2, err := btcsecp256k1.SignCompact(btcsecp256k1.S256(), pri, hash, false)
+	t.Log(fmt.Sprintf("sig: %x", sig2))
+
+	t.Log(fmt.Sprintf("%d:%d:%d\n", len(sig.Serialize()), len(sig1), len(sig2)))
 }

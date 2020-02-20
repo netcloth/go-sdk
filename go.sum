@@ -227,6 +227,7 @@ github.com/netcloth/netcloth-chain v1.0.12 h1:kH78eZYeK+IvC4lkB6uVeL+2ioh4J6Oayc
 github.com/netcloth/netcloth-chain v1.0.12/go.mod h1:Z9RPpXT4mmTcLK9RXyavtWUs+en6TcbE9Y787r9IZk0=
 github.com/netcloth/netcloth-chain v1.0.14 h1:m0DXZxst8rtKkgO6dGFOe56yhl2WRHfcQHdb7TIkgl4=
 github.com/netcloth/netcloth-chain v1.0.14/go.mod h1:HMUzbR34wbOaHcqdfj5S4H4sFc9L2niVO3ua8VvZG3E=
+github.com/netcloth/netcloth-chain v1.0.15/go.mod h1:Z9RPpXT4mmTcLK9RXyavtWUs+en6TcbE9Y787r9IZk0=
 github.com/oklog/ulid v1.3.1/go.mod h1:CirwcVhetQ6Lv90oh/F+FBtV6XMibvdAFo93nm5qn4U=
 github.com/olebedev/config v0.0.0-20190528211619-364964f3a8e4 h1:JnVsYEQzhEcOspy6ngIYNF2u0h2mjkXZptzX0IzZQ4g=
 github.com/olebedev/config v0.0.0-20190528211619-364964f3a8e4/go.mod h1:RL5+WRxWTAXqqCi9i+eZlHrUtO7AQujUqWi+xMohmc4=
