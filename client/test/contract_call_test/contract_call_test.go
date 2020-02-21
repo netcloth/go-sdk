@@ -1,7 +1,6 @@
 package contract_call_test
 
 import (
-	"encoding/base64"
 	"encoding/hex"
 	"fmt"
 	"strconv"
@@ -16,7 +15,7 @@ import (
 
 const (
 	yamlPath           = "/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml"
-	contractBech32Addr = "nch13kmemljzcnm6jyku8xnejmc62vdunfpps7jjj9"
+	contractBech32Addr = "nch1anysg6zzd2ekxphw9cg8h7fsrf6l42cp76mmrc"
 )
 
 var (
@@ -25,10 +24,12 @@ var (
 
 func Test_ContractCall(t *testing.T) {
 	const (
-		functionSig         = "4ee604a3" // the first 4 bytes of sig of function: revoke
-		payloadTemplate     = "%s%s%s%064x%064x%s%s%064x"
+		functionSig     = "81a8a747" // the first 4 bytes of sig of function: recall
+		payloadTemplate = "%s%s%s%s000000000000000000000000%064x%064x%s%s%064x"
+
 		fromPubkeyHexString = "8c36b163c26f492abc874648b7258450394fe78133bcc4d920895d0ce8c3ac4e"
 		toPubKeyHexString   = "8c36b163c26f492abc874648b7258450394fe78133bcc4d920895d0ce8c3ac4e"
+		fromAddr            = "692a70d2e424a56d2c6c27aa97d1a86395877b3a"
 		revokeType          = 0
 		timestamp           = 1581065043
 		rHexString          = "1f9b85de5bfdea9b1310e6712b7585d19202ef1190eed0d5ecc6449108893fde"
@@ -41,7 +42,7 @@ func Test_ContractCall(t *testing.T) {
 	require.True(t, err == nil)
 
 	// 构造合约的payload
-	payloadStr := fmt.Sprintf(payloadTemplate, functionSig, fromPubkeyHexString, toPubKeyHexString, revokeType, timestamp, rHexString, sHexString, v)
+	payloadStr := fmt.Sprintf(payloadTemplate, functionSig, fromPubkeyHexString, toPubKeyHexString, fromAddr, revokeType, timestamp, rHexString, sHexString, v)
 	fmt.Println(fmt.Sprintf("payload: %s", payloadStr))
 	payload, err := hex.DecodeString(payloadStr)
 	require.NoError(t, err)
@@ -54,7 +55,7 @@ func Test_ContractCall(t *testing.T) {
 	}
 }
 
-const txHash = "A1AA0EFFB1FD1C1E93830B71789FB4A67FB2E076307BCEA635522143BB12A7D7"
+const txHash = "4ACAD763B7CFF863F832FD3DB15A67C9C7B960E5698151CD5A0C51FD7DEF2CD5"
 
 func Test_ContractQuery(t *testing.T) {
 	client, err := client.NewNCHClient(yamlPath)
@@ -79,66 +80,36 @@ func Test_ContractQuery(t *testing.T) {
 	t.Log(timestampStr)
 }
 
-type MsgDeleteResult struct {
-	from      string `json:"from" yaml:"from"`
-	to        string `json:"to" yaml:"to"`
-	pubkey    uint64 `json:"pubkey" yaml:"pubkey"`
-	timestamp uint64 `json:"timestamp" yaml:"timestamp"`
-}
-
-func (res MsgDeleteResult) String() string {
-	return fmt.Sprintf(
-		`
-from: %s
-to: %s
-pubkey: %d
-timestamp: %d`, res.from, res.to, res.pubkey, res.timestamp)
-}
 func Test_QueryContractEvents(t *testing.T) {
-	// 遍历 [start, end] 之间的区块
-	startBlockNum := int64(6280)
-	endBlockNum := int64(6470)
+	const (
+		startBlockNum = 4400
+		endBlockNum   = 4446
+	)
 
 	client, err := client.NewNCHClient(yamlPath)
 	require.True(t, err == nil)
 
-	// 查询合约相关的事件
 	res, err := client.QueryContractEvents(contractBech32Addr, startBlockNum, endBlockNum)
 	require.True(t, err == nil)
+	t.Log(res)
 
-	// 根据abi，解析出事件的data
-	var results []MsgDeleteResult
 	for _, item := range res {
-		var result MsgDeleteResult
-
-		s, _ := base64.StdEncoding.DecodeString(item)
-
-		// 第一个byte32为from地址
-		a := fmt.Sprintf("%x", s[12:32])
-		// 第二个byte32为to地址
-		b := fmt.Sprintf("%x", s[44:64])
-		// 为int64类型的timestame
-		c := fmt.Sprintf("%x", s[64:96])
-		// pubkey
-		d := fmt.Sprintf("%x", s[96:128])
-
-		// address - from
-		accA, _ := sdk.AccAddressFromHex(a)
-		// address - to
-		accB, _ := sdk.AccAddressFromHex(b)
-		// uint - timestamp
-		timestamp, _ := strconv.ParseUint(c, 16, 64)
-		// int64 - public key
-		pk, _ := strconv.ParseUint(d, 16, 64)
-
-		result.from = accA.String()
-		result.to = accB.String()
-		result.pubkey = pk
-		result.timestamp = timestamp
-		results = append(results, result)
-
 		t.Log(item)
-	}
 
-	fmt.Println(results)
+		fromPubkeyStr := item[:64]
+		toPubkeyStr := item[64:128]
+		revokeTypeStr := item[128:192]
+		timestampStr := item[192:]
+
+		revokeType, _ := strconv.ParseUint(revokeTypeStr, 16, 64)
+		timestamp, _ := strconv.ParseUint(timestampStr, 16, 64)
+
+		t.Log(fromPubkeyStr)
+		t.Log(toPubkeyStr)
+		t.Log(revokeTypeStr)
+		t.Log(timestampStr)
+
+		t.Log(revokeType)
+		t.Log(timestamp)
+	}
 }
