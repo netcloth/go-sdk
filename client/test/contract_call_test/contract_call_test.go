@@ -15,7 +15,7 @@ import (
 
 const (
 	yamlPath           = "/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml"
-	contractBech32Addr = "nch1anysg6zzd2ekxphw9cg8h7fsrf6l42cp76mmrc"
+	contractBech32Addr = "nch1kl6qunfqus9xlt4zpt89q2r3ty2y2l8f4348wt"
 )
 
 var (
@@ -25,7 +25,7 @@ var (
 func Test_ContractCall(t *testing.T) {
 	const (
 		functionSig     = "81a8a747" // the first 4 bytes of sig of function: recall
-		payloadTemplate = "%s%s%s%s000000000000000000000000%064x%064x%s%s%064x"
+		payloadTemplate = "%s%s%s000000000000000000000000%s%064x%064x%s%s%064x"
 
 		fromPubkeyHexString = "8c36b163c26f492abc874648b7258450394fe78133bcc4d920895d0ce8c3ac4e"
 		toPubKeyHexString   = "8c36b163c26f492abc874648b7258450394fe78133bcc4d920895d0ce8c3ac4e"
