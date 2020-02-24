@@ -1,6 +1,7 @@
 package test
 
 import (
+	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"strings"
@@ -101,7 +102,7 @@ func Test_1(t *testing.T) {
 }
 
 func Test_2(t *testing.T) {
-	hash, _ := hexutil.Decode("0xce0677bb30baa8cf067c88db9811f4333d131bf8bcf12fe7065d211dce971008")
+	hash, _ := hexutil.Decode("0xd86cc96fd39ec373298bf7958f9a67ae334c922e9d83678ebf440bee460c3f15")
 
 	curve := btcsecp256k1.S256()
 
@@ -119,5 +120,32 @@ func Test_2(t *testing.T) {
 	t.Log(fmt.Sprintf("sig: %x", sig))
 
 	rpubkey, _, _ := btcsecp256k1.RecoverCompact(btcsecp256k1.S256(), sig, hash)
+	t.Log(fmt.Sprintf("recovered pubkey: %x", rpubkey))
+}
+
+
+func Test_3(t *testing.T) {
+	curve := btcsecp256k1.S256()
+
+	pk, _ := btcsecp256k1.NewPrivateKey(curve)
+	t.Log(fmt.Sprintf("pk %x", pk))
+
+	pubkey := pk.PubKey()
+	t.Log(fmt.Sprintf("pubkey: %x", pubkey.SerializeCompressed()))
+
+	t.Log(fmt.Sprintf("uncompressed pubkey: %x", pubkey.SerializeUncompressed()))
+	addr, _ := keys.UNCompressedPubKey2Address(fmt.Sprintf("%x", pubkey.SerializeUncompressed()))
+	t.Log(fmt.Sprintf("addr = %v", addr))
+
+	d := fmt.Sprintf("%x%x%x%02x%016x", pubkey.SerializeCompressed()[1:], pubkey.SerializeCompressed()[1:], addr.Bytes(), 1, 100)
+	dhex, _ := hexutil.Decode(d)
+	t.Log(fmt.Sprintf("d: %x", dhex))
+
+	hash := sha256.Sum256(dhex)
+	t.Log(fmt.Sprintf("hash: %x", hash))
+	sig, _ := btcsecp256k1.SignCompact(curve, pk, hash[:], false)
+	t.Log(fmt.Sprintf("sig: %x", sig))
+
+	rpubkey, _, _ := btcsecp256k1.RecoverCompact(btcsecp256k1.S256(), sig, hash[:])
 	t.Log(fmt.Sprintf("recovered pubkey: %x", rpubkey))
 }
