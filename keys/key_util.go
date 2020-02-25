@@ -27,6 +27,20 @@ func UNCompressedPubKey2CompressedPubKey(uncompressedPubKey string) (compressedP
 	return pubkey.SerializeCompressed(), nil
 }
 
+func CompressedPubKey2UNCompressedPubKey(compressedPubKey string) (unCompressedPubKey []byte, err error) {
+	compressedPubKeyHex, err := hex.DecodeString(compressedPubKey)
+	if err != nil {
+		return nil, err
+	}
+
+	pubkey, err := btcsecp256k1.ParsePubKey(compressedPubKeyHex, btcsecp256k1.S256())
+	if err != nil {
+		return nil, err
+	}
+
+	return pubkey.SerializeUncompressed(), nil
+}
+
 func UNCompressedPubKey2Address(uncompressedPubKey string) (crypto.Address, error) {
 	pubKey, err := UNCompressedPubKey2CompressedPubKey(uncompressedPubKey)
 	if err != nil {
