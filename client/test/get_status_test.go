@@ -23,3 +23,11 @@ func TestClient_GetStatus(t *testing.T) {
 		t.Log(util.ToJsonIgnoreErr(res))
 	}
 }
+
+func TestClient_GetSyncStatus(t *testing.T) {
+	if res, err := c.GetSyncStatus(); err != nil {
+		t.Fatal(err)
+	} else {
+		t.Log(util.ToJsonIgnoreErr(res))
+	}
+}

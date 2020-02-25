@@ -1,13 +1,13 @@
 keystore:
-  KeyStoreFileAbsPath: "/Users/sky/go/src/github.com/netcloth/go-sdk/config/keystore"
+  KeyStoreFileAbsPath: "/Users/sun/go/src/github.com/netcloth/go-sdk/config/keystore"
   KeyStorePasswd: "11111111"
 
 endpoint:
   LiteClientRpcEndpoint: "http://127.0.0.1:1317"
   RPCEndpoint: "http://127.0.0.1:26657"
 
-ChainID: "nch-prinet-sky"
+ChainID: "nch-testnet"
 
 feeParams:
   TxDefaultGas: 200000
-  TxDefaultFeeAmount: 500000000
+  TxDefaultFeeAmount: 50000000

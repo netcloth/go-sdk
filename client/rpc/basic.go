@@ -11,6 +11,7 @@ import (
 type RPCClient interface {
 	BroadcastTx(broadcastType string, tx types.Tx) (itypes.BroadcastTxResult, error)
 	GetStatus() (ResultStatus, error)
+	GetSyncStatus() (SyncStatus, error)
 	GetTx(hash string) (ResultTx, error)
 	Block(height int64) (*ctypes.ResultBlock, error)
 }
