@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	yamlPath           = "/Users/sky/go/src/github.com/netcloth/go-sdk/config/sdk.yaml"
-	contractBech32Addr = "nch1kl6qunfqus9xlt4zpt89q2r3ty2y2l8f4348wt"
+	yamlPath           = "/Users/sun/go/src/github.com/netcloth/go-sdk/config/sdk.yaml"
+	contractBech32Addr = "nch1xtuytfypszvyqd0md07jjcsv6wnqx9her4l4tv"
 )
 
 var (
@@ -24,17 +24,17 @@ var (
 
 func Test_ContractCall(t *testing.T) {
 	const (
-		functionSig     = "81a8a747" // the first 4 bytes of sig of function: recall
-		payloadTemplate = "%s%s%s000000000000000000000000%s%064x%064x%s%s%064x"
+		functionSig     = "aaa88185" // the first 4 bytes of sig of function: recall
+		payloadTemplate = "%s00000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000180000000000000000000000000%s%064x%064x%s%s%064x0000000000000000000000000000000000000000000000000000000000000042%s0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000042%s000000000000000000000000000000000000000000000000000000000000"
 
-		fromPubkeyHexString = "8c36b163c26f492abc874648b7258450394fe78133bcc4d920895d0ce8c3ac4e"
-		toPubKeyHexString   = "8c36b163c26f492abc874648b7258450394fe78133bcc4d920895d0ce8c3ac4e"
-		fromAddr            = "692a70d2e424a56d2c6c27aa97d1a86395877b3a"
-		revokeType          = 0
-		timestamp           = 1581065043
-		rHexString          = "1f9b85de5bfdea9b1310e6712b7585d19202ef1190eed0d5ecc6449108893fde"
-		sHexString          = "7d36d77636032619603036c0deb4c6d985ebc44496f4cfc81a0acc4ed63c21b3"
-		v                   = 0
+		fromPubkeyHexString = "02fc950f1e62b9b2b369448f422808af7d57dbd6ffc0fdbbf2f5849b847285eda8"
+		toPubkeyHexString   = "02fc950f1e62b9b2b369448f422808af7d57dbd6ffc0fdbbf2f5849b847285eda8"
+		fromAddr            = "AC46A441FAA26708B7783EC48D8742C74C9F7927"
+		recallType          = 1
+		timestamp           = 100
+		rHexString          = "830f66a98feb664f312593f0c3fc9b19eb24d67baae894554c1f44ed3aad5a8e"
+		sHexString          = "0fa9a3e5b2a9356c887624750539753cdcc2934867503225e7af5608534444c4"
+		v                   = 0x1c
 	)
 
 	client, err := client.NewNCHClient(yamlPath)
@@ -42,7 +42,7 @@ func Test_ContractCall(t *testing.T) {
 	require.True(t, err == nil)
 
 	// 构造合约的payload
-	payloadStr := fmt.Sprintf(payloadTemplate, functionSig, fromPubkeyHexString, toPubKeyHexString, fromAddr, revokeType, timestamp, rHexString, sHexString, v)
+	payloadStr := fmt.Sprintf(payloadTemplate, functionSig, fromAddr, recallType, timestamp, rHexString, sHexString, v, hexutil.Encode([]byte(fromPubkeyHexString)), hexutil.Encode([]byte(toPubkeyHexString)))
 	fmt.Println(fmt.Sprintf("payload: %s", payloadStr))
 	payload, err := hex.DecodeString(payloadStr)
 	require.NoError(t, err)
@@ -55,7 +55,7 @@ func Test_ContractCall(t *testing.T) {
 	}
 }
 
-const txHash = "4ACAD763B7CFF863F832FD3DB15A67C9C7B960E5698151CD5A0C51FD7DEF2CD5"
+const txHash = "4D71E8E82AF77F9AE0D681053B3D6BBB78D7BCCCE675D6B0905FC8CB3982FF73"
 
 func Test_ContractQuery(t *testing.T) {
 	client, err := client.NewNCHClient(yamlPath)
@@ -69,21 +69,21 @@ func Test_ContractQuery(t *testing.T) {
 
 	item := r.Result.Logs[0].Data
 
-	fromPubkeyStr := item[:64]
-	toPubkeyStr := item[64:128]
 	revokeTypeStr := item[128:192]
-	timestampStr := item[192:]
+	timestampStr := item[192:256]
+	fromPubkeyStr := item[320:452]
+	toPubkeyStr := item[576:708]
 
-	t.Log(fromPubkeyStr)
-	t.Log(toPubkeyStr)
 	t.Log(revokeTypeStr)
 	t.Log(timestampStr)
+	t.Log(fromPubkeyStr)
+	t.Log(toPubkeyStr)
 }
 
 func Test_QueryContractEvents(t *testing.T) {
 	const (
-		startBlockNum = 4400
-		endBlockNum   = 4446
+		startBlockNum = 1
+		endBlockNum   = 200
 	)
 
 	client, err := client.NewNCHClient(yamlPath)
@@ -96,10 +96,10 @@ func Test_QueryContractEvents(t *testing.T) {
 	for _, item := range res {
 		t.Log(item)
 
-		fromPubkeyStr := item[:64]
-		toPubkeyStr := item[64:128]
 		revokeTypeStr := item[128:192]
-		timestampStr := item[192:]
+		timestampStr := item[192:256]
+		fromPubkeyStr := item[320:452]
+		toPubkeyStr := item[576:708]
 
 		revokeType, _ := strconv.ParseUint(revokeTypeStr, 16, 64)
 		timestamp, _ := strconv.ParseUint(timestampStr, 16, 64)

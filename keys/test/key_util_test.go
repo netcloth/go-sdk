@@ -37,6 +37,15 @@ func Test_UNCompressedPubKey2CompressedPubKey(t *testing.T) {
 	require.Equal(t, compressedPubKey, fmt.Sprintf("%x", pubKeyBytes))
 }
 
+func Test_CompressedPubKey2UNCompressedPubKey(t *testing.T) {
+	//k1 := "02ea27a86fd8c8a4fe96d7a4c2471f9b390d65c37a7146bf55b71c79f25dab4d03"
+	k2 := "03ea27a86fd8c8a4fe96d7a4c2471f9b390d65c37a7146bf55b71c79f25dab4d03"
+	pubKeyBytes, err := keys.CompressedPubKey2UNCompressedPubKey(k2)
+	require.True(t, err == nil)
+	t.Log(fmt.Sprintf("%x", pubKeyBytes))
+	//require.Equal(t, compressedPubKey, fmt.Sprintf("%x", pubKeyBytes))
+}
+
 func Test_UNCompressedPubKey2Address(t *testing.T) {
 	addr, err := keys.UNCompressedPubKey2Address(uncompressedPubKey)
 	require.True(t, err == nil)
@@ -138,6 +147,34 @@ func Test_3(t *testing.T) {
 	t.Log(fmt.Sprintf("addr = %v", addr))
 
 	d := fmt.Sprintf("%x%x%x%02x%016x", pubkey.SerializeCompressed()[1:], pubkey.SerializeCompressed()[1:], addr.Bytes(), 1, 100)
+	dhex, _ := hexutil.Decode(d)
+	t.Log(fmt.Sprintf("d: %x", dhex))
+
+	hash := sha256.Sum256(dhex)
+	t.Log(fmt.Sprintf("hash: %x", hash))
+	sig, _ := btcsecp256k1.SignCompact(curve, pk, hash[:], false)
+	t.Log(fmt.Sprintf("sig: %x", sig))
+
+	rpubkey, _, _ := btcsecp256k1.RecoverCompact(btcsecp256k1.S256(), sig, hash[:])
+	t.Log(fmt.Sprintf("recovered pubkey: %x", rpubkey))
+}
+
+func Test_4(t *testing.T) {
+	curve := btcsecp256k1.S256()
+
+	pk, _ := btcsecp256k1.NewPrivateKey(curve)
+	t.Log(fmt.Sprintf("pk %x", pk))
+
+	pubkey := pk.PubKey()
+	t.Log(fmt.Sprintf("pubkey: %x", pubkey.SerializeCompressed()))
+
+	t.Log(fmt.Sprintf("uncompressed pubkey: %x", pubkey.SerializeUncompressed()))
+	addr, _ := keys.UNCompressedPubKey2Address(fmt.Sprintf("%x", pubkey.SerializeUncompressed()))
+	t.Log(fmt.Sprintf("addr = %v", addr))
+
+	fk := fmt.Sprintf("%x", pubkey.SerializeCompressed())
+	tk := fmt.Sprintf("%x", pubkey.SerializeCompressed())
+	d := fmt.Sprintf("%s%s%x%02x%016x", hexutil.Encode([]byte(fk)), hexutil.Encode([]byte(tk)), addr.Bytes(), 1, 100)
 	dhex, _ := hexutil.Decode(d)
 	t.Log(fmt.Sprintf("d: %x", dhex))
 
