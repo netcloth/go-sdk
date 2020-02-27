@@ -34,7 +34,9 @@ func (c *client) QueryContractEvents(contractBech32Addr string, startBlockNum in
 
 					// query events by txhash
 					eventLog, _ := c.liteClient.QueryContractLog(txhash)
-					result = append(result, eventLog.Result.Logs[0].Data)
+					for _, e := range eventLog.Result.Logs {
+						result = append(result, e.Data)
+					}
 				}
 			}
 		}
