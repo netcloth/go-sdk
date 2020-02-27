@@ -1,0 +1,110 @@
+[
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "f",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "t",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint8",
+				"name": "rt",
+				"type": "uint8"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint64",
+				"name": "ts",
+				"type": "uint64"
+			}
+		],
+		"name": "Recall",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "fromPubkey",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "toPubkey",
+				"type": "string"
+			},
+			{
+				"internalType": "uint8",
+				"name": "recallType",
+				"type": "uint8"
+			}
+		],
+		"name": "queryRecall",
+		"outputs": [
+			{
+				"internalType": "uint64",
+				"name": "",
+				"type": "uint64"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "fromPubkey",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "toPubkey",
+				"type": "string"
+			},
+			{
+				"internalType": "address",
+				"name": "fromAddr",
+				"type": "address"
+			},
+			{
+				"internalType": "uint8",
+				"name": "recallType",
+				"type": "uint8"
+			},
+			{
+				"internalType": "uint64",
+				"name": "timestamp",
+				"type": "uint64"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "R",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "bytes32",
+				"name": "S",
+				"type": "bytes32"
+			},
+			{
+				"internalType": "uint8",
+				"name": "V",
+				"type": "uint8"
+			}
+		],
+		"name": "recall",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
