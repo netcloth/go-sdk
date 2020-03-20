@@ -102,9 +102,14 @@ func Test_ContractCall(t *testing.T) {
 	}
 }
 
-const txHash = "E96A859D825377A8BD97C76BF77B39C2D5078F61F375EC8F6B31C90E55FC8FD0"
+const txHash = "724B5E5141AD94E10C5945D55394A858963422CBC4D772E796E90E0D66943FE1"
 
 func Test_ContractQuery(t *testing.T) {
+	const (
+		abiFilePath   = "/Users/sun/go/src/github.com/netcloth/go-sdk/config/contract.abi"
+		eventFuncName = "Recall"
+	)
+
 	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
@@ -112,32 +117,19 @@ func Test_ContractQuery(t *testing.T) {
 	r, err := client.QueryContractLog(txId)
 	require.True(t, err == nil)
 
-	t.Log(r.Result.Logs[0].Data)
+	//t.Log(r.Result)
+	//if len(r.Result.Logs) == 0 {
+	//	return
+	//}
 
-	item := r.Result.Logs[0].Data
-	s, _ := base64.StdEncoding.DecodeString(item)
-	fmt.Println(fmt.Sprintf("%d, %x", len(s), s))
+	t.Log(fmt.Sprintf("%s", r.Result.Logs[0].Data))
+	s, _ := base64.StdEncoding.DecodeString(r.Result.Logs[0].Data)
+	vs, err := util.UnpackValuesByABIFile(abiFilePath, eventFuncName, s)
+	t.Log(err)
 
-	a := fmt.Sprintf("%x", s[12:32])
-	b := fmt.Sprintf("%x", s[44:64])
-	c := fmt.Sprintf("%x", s[64:96])
-	d := fmt.Sprintf("%x", s[96:128])
-
-	// address - from
-	accA, _ := sdk.AccAddressFromHex(a)
-	fmt.Println(fmt.Sprintf("%s --> %s", a, accA.String()))
-
-	// address - to
-	accB, _ := sdk.AccAddressFromHex(b)
-	fmt.Println(fmt.Sprintf("%s --> %s", b, accB.String()))
-
-	// uint - timestamp
-	timestamp, _ := strconv.ParseUint(c, 16, 64)
-	fmt.Println(fmt.Sprintf("%s --> %d", c, timestamp))
-
-	// int64 - public key
-	pk, _ := strconv.ParseUint(d, 16, 64)
-	fmt.Println(fmt.Sprintf("%s --> %d", d, pk))
+	for _, v := range vs {
+		t.Log(fmt.Sprintf("%v\n", v))
+	}
 }
 
 func Test_QueryContractEvents(t *testing.T) {

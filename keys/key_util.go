@@ -85,3 +85,7 @@ func PubKeyHexString2AddressBech32(pubKeyStr string) (string, error) {
 func PubKey2AddressBech32(pubKey crypto.PubKey) (string, error) {
 	return types.AccAddress(pubKey.Address().Bytes()).String(), nil
 }
+
+func GetAccAddressByBechAddress(bech32addr string) (types.AccAddress, error) {
+	return types.AccAddressFromBech32(bech32addr)
+}

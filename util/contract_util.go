@@ -38,3 +38,18 @@ func BuildPayloadByABIFile(abiFilePath, funcName string, args ...interface{}) ([
 	}
 	return BuildPayloadByABI(contractAbi, funcName, args...)
 }
+
+func UnpackValuesByABI(contractAbi, funcName string, d []byte) ([]interface{}, error) {
+	abiObj, _ := abi.JSON(strings.NewReader(contractAbi))
+	m, _ := abiObj.Methods[funcName]
+	return m.Inputs.UnpackValues(d)
+}
+
+func UnpackValuesByABIFile(abiFilePath, funcName string, d []byte) ([]interface{}, error) {
+	contractAbi, err := LoadABI(abiFilePath)
+	if err != nil {
+		return nil, err
+	}
+
+	return UnpackValuesByABI(contractAbi, funcName, d)
+}
