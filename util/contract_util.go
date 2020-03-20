@@ -42,7 +42,7 @@ func BuildPayloadByABIFile(abiFilePath, funcName string, args ...interface{}) ([
 func UnpackValuesByABI(contractAbi, funcName string, d []byte) ([]interface{}, error) {
 	abiObj, _ := abi.JSON(strings.NewReader(contractAbi))
 	m, _ := abiObj.Methods[funcName]
-	return m.Inputs.UnpackValues(d)
+	return m.Outputs.UnpackValues(d)
 }
 
 func UnpackValuesByABIFile(abiFilePath, funcName string, d []byte) ([]interface{}, error) {

@@ -35,6 +35,11 @@ func Test_UNCompressedPubKey2CompressedPubKey(t *testing.T) {
 	pubKeyBytes, err := keys.UNCompressedPubKey2CompressedPubKey(uncompressedPubKey)
 	require.True(t, err == nil)
 	require.Equal(t, compressedPubKey, fmt.Sprintf("%x", pubKeyBytes))
+
+	addr, err := sdk.AccAddressFromBech32("nch1u5n3wdt83v96rrescyvtxpcj8rxdue65dyt4u7")
+	t.Log(fmt.Sprintf("%x", addr.Bytes()))
+	addr2, err := sdk.AccAddressFromHex("c7bb0a77e5dc6de40214c1bb074cca2503bf10d2")
+	t.Log(fmt.Sprintf("%x-%s", addr2.Bytes(), addr2.String()))
 }
 
 func Test_CompressedPubKey2UNCompressedPubKey(t *testing.T) {
@@ -131,7 +136,6 @@ func Test_2(t *testing.T) {
 	rpubkey, _, _ := btcsecp256k1.RecoverCompact(btcsecp256k1.S256(), sig, hash)
 	t.Log(fmt.Sprintf("recovered pubkey: %x", rpubkey))
 }
-
 
 func Test_3(t *testing.T) {
 	curve := btcsecp256k1.S256()
