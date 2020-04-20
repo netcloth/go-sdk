@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"strconv"
 	"strings"
 	"testing"
 
@@ -28,7 +27,7 @@ const (
 	s              = 4097
 
 	// contract address
-	contractBech32Addr = "nch1zy78a4w9d3q7gu9wpvu0cmej2x0jv905yhjwyg"
+	contractBech32Addr = "nch1h50h6zyf2asumja34hh6gf8grmtdna08qzcmqr"
 	contractAbi        = `[{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"from","type":"address"},{"indexed":false,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"timestamp","type":"uint256"},{"indexed":false,"internalType":"int64","name":"pk","type":"int64"}],"name":"Recall","type":"event"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"int64","name":"r","type":"int64"},{"internalType":"int64","name":"s","type":"int64"}],"name":"ecrecoverDecode","outputs":[{"internalType":"address","name":"addr","type":"address"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"address","name":"from","type":"address"}],"name":"queryParams","outputs":[{"internalType":"int64","name":"pubkey","type":"int64"},{"internalType":"uint256","name":"timestamp","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"timestamp","type":"uint256"},{"internalType":"int64","name":"pk","type":"int64"},{"internalType":"int64","name":"r","type":"int64"},{"internalType":"int64","name":"s","type":"int64"}],"name":"recall","outputs":[],"stateMutability":"nonpayable","type":"function"}]`
 	/*
 		合约代码参考：https://github.com/iavl/sol-demo/blob/master/demo2.sol
@@ -49,22 +48,6 @@ const (
 var (
 	amount = sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(0))
 )
-
-type MsgDeleteResult struct {
-	from      string `json:"from" yaml:"from"`
-	to        string `json:"to" yaml:"to"`
-	pubkey    uint64 `json:"pubkey" yaml:"pubkey"`
-	timestamp uint64 `json:"timestamp" yaml:"timestamp"`
-}
-
-func (res MsgDeleteResult) String() string {
-	return fmt.Sprintf(
-		`
-from: %s
-to: %s
-pubkey: %d
-timestamp: %d`, res.from, res.to, res.pubkey, res.timestamp)
-}
 
 func Test_ContractCall(t *testing.T) {
 	client, err := client.NewNCHClient(yaml_path)
@@ -134,49 +117,28 @@ func Test_ContractQuery(t *testing.T) {
 
 func Test_QueryContractEvents(t *testing.T) {
 	// 遍历 [start, end] 之间的区块
-	startBlockNum := int64(6280)
-	endBlockNum := int64(6470)
+	startBlockNum := int64(60)
+	endBlockNum := int64(80)
 
 	client, err := client.NewNCHClient(yaml_path)
 	require.True(t, err == nil)
 
 	// 查询合约相关的事件
-	res, err := client.QueryContractEvents(contractBech32Addr, startBlockNum, endBlockNum)
+	events, err := client.QueryContractEvents(contractBech32Addr, startBlockNum, endBlockNum)
 	require.True(t, err == nil)
 
+	const abiFilePath = "/Users/sun/nch/contract/r/r.abi"
 	// 根据abi，解析出事件的data
-	var results []MsgDeleteResult
-	for _, item := range res {
-		var result MsgDeleteResult
+	for _, e := range events {
+		s, _ := hexutil.Decode(e)
 
-		s, _ := base64.StdEncoding.DecodeString(item)
+		r, err := util.UnpackEventValuesByABIFile(abiFilePath, "Recall", s)
+		if err != nil {
+			t.Log(err)
+		}
 
-		// 第一个byte32为from地址
-		a := fmt.Sprintf("%x", s[12:32])
-		// 第二个byte32为to地址
-		b := fmt.Sprintf("%x", s[44:64])
-		// 为int64类型的timestame
-		c := fmt.Sprintf("%x", s[64:96])
-		// pubkey
-		d := fmt.Sprintf("%x", s[96:128])
+		require.Nil(t, err)
 
-		// address - from
-		accA, _ := sdk.AccAddressFromHex(a)
-		// address - to
-		accB, _ := sdk.AccAddressFromHex(b)
-		// uint - timestamp
-		timestamp, _ := strconv.ParseUint(c, 16, 64)
-		// int64 - public key
-		pk, _ := strconv.ParseUint(d, 16, 64)
-
-		result.from = accA.String()
-		result.to = accB.String()
-		result.pubkey = pk
-		result.timestamp = timestamp
-		results = append(results, result)
-
-		t.Log(item)
+		t.Log(fmt.Sprintf("%v", r))
 	}
-
-	fmt.Println(results)
 }

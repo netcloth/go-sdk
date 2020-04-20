@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	ethsecp256k1 "github.com/ethereum/go-ethereum/crypto/secp256k1"
 	"strings"
 	"testing"
 
@@ -25,10 +26,10 @@ import (
 )
 
 const (
-	uncompressedPubKey = "048c36b163c26f492abc874648b7258450394fe78133bcc4d920895d0ce8c3ac4e61c6895d129a36c94e4a9a724b8061e32560eb8e4aa9435373fc93afa22425de"
-	compressedPubKey   = "028c36b163c26f492abc874648b7258450394fe78133bcc4d920895d0ce8c3ac4e"
-	address            = "6983fed7a7159b82b64a5cd5ce3b3adf6b6aa3f9"
-	addressBech32      = "nch1dxpla4a8zkdc9dj2tn2uuwe6ma4k4glewcte7w"
+	uncompressedPubKey = "0487e7a605af50b0e57838bc8508fe80f74dfd8710f92a2c165e10b407b9385b57968620bbd71b7888915e9fa861e3e47b38aa49f029886277404ad5b82771c2e4"
+	compressedPubKey   = "03b2967b1ae38a4e13a7b5a0262dd9a5e3aae899209ab828d7ab73bc199a389302"
+	address            = "1c0311d33691aa5bf659fe7ae8276cce19b304b5"
+	addressBech32      = "nch1nqa7u8yyy39lygmen0p6mfr3as83xpplhqkr2s"
 )
 
 func Test_UNCompressedPubKey2CompressedPubKey(t *testing.T) {
@@ -52,6 +53,10 @@ func Test_CompressedPubKey2UNCompressedPubKey(t *testing.T) {
 }
 
 func Test_UNCompressedPubKey2Address(t *testing.T) {
+	pk, err := hexutil.Decode("303362323936376231616533386134653133613762356130323632646439613565336161653839393230396162383238643761623733626331393961333839333032")
+	require.True(t, err == nil)
+	t.Log(fmt.Sprintf("len = %d, %x, %s\n", len(pk), pk, string(pk)))
+
 	addr, err := keys.UNCompressedPubKey2Address(uncompressedPubKey)
 	require.True(t, err == nil)
 	require.Equal(t, address, strings.ToLower(addr.String()))
@@ -65,8 +70,15 @@ func Test_UNCompressedPubKey2AddressBech32(t *testing.T) {
 
 func Test_PubKeyHexString2AddressBech32(t *testing.T) {
 	addr, err := keys.PubKeyHexString2AddressBech32(compressedPubKey)
+	t.Log(fmt.Sprintf("addr = %x\n", addr))
 	require.True(t, err == nil)
 	require.Equal(t, addressBech32, addr)
+}
+
+func Test_PubKeyHexString2AddressBech32111(t *testing.T) {
+	addr, err := keys.PubKeyHexString2Address(compressedPubKey)
+	require.True(t, err == nil)
+	t.Log(fmt.Sprintf("addr = %x\n", addr))
 }
 
 func Test_PubKey2AddressBech32(t *testing.T) {
@@ -189,4 +201,24 @@ func Test_4(t *testing.T) {
 
 	rpubkey, _, _ := btcsecp256k1.RecoverCompact(btcsecp256k1.S256(), sig, hash[:])
 	t.Log(fmt.Sprintf("recovered pubkey: %x", rpubkey))
+}
+
+func Test_Ecrecover(t *testing.T) {
+	hash, err := hexutil.Decode("d2a93c9b60dc0861011ea1510c838dc3af99f15cc9b88060ae29bf2dbc3026a4")
+	require.True(t, err == nil)
+
+	sig, err := hexutil.Decode("3c8e6518da47c6e9dd2172de39971558882783017d8fdb3e105d608170751ea734887cd5367bd8222723094775a43e8b3cafa9170e00c6dd97ffafc4e52a88821c")
+	require.True(t, err == nil)
+
+	sig[64] = sig[64] - 27
+
+	pubkey, err := ethsecp256k1.RecoverPubkey(hash, sig)
+	require.True(t, err == nil)
+	t.Log(fmt.Sprintf("pubkey = %x", pubkey))
+}
+
+func Test_key(t *testing.T) {
+	addr, err := sdk.AccAddressFromBech32(addressBech32)
+	require.True(t, err == nil)
+	t.Log(fmt.Sprintf("add = %x", addr.Bytes()))
 }

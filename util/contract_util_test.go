@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/netcloth/netcloth-chain/hexutil"
 	"github.com/stretchr/testify/require"
+	"math/big"
 	"testing"
 )
 
@@ -30,11 +31,39 @@ func Test_UnpackValuesByABIFile(t *testing.T) {
 
 func Test_PackValuesByABIFile(t *testing.T) {
 	const (
-		funcName = "ipalClaim"
+		abiFile  = "/Users/sun/nch/contract/alltypes/alltypes.abi"
+		funcName = "testint256"
 	)
 
-	value, err := BuildPayloadByABIFile(abiFile, funcName, "nchtest01", `{"operator_address":"nch19vnsnnseazkyuxgkt0098gqgvfx0wxmv96479m","moniker":"nchtest01","website":"nchtest01.com","details":"test","endpoints":[{"type":"1","endpoint":"http://47.104.248.183:80"}]}`)
+	v, success := big.NewInt(0).SetString("57896044618658097711785492504343953926634992332820282019728792003956564819968", 10)
+	require.True(t, success == true)
+	value, err := BuildPayloadByABIFile(abiFile, funcName, v)
 	require.True(t, err == nil)
 
 	t.Log(fmt.Sprintf("%x", value))
+}
+
+func Test_PackValuesByABIFile1(t *testing.T) {
+
+	value, err := BuildPayloadByABIFile("/Users/sun/Desktop/abi2", "ipalClaim", "Q岛", `{"operator_address":"nch1nqa7u8yyy39lygmen0p6mfr3as83xpplhqkr2s","moniker":"Q岛","website":"www.hznuodetech.com","details":"qisland official","extension":"","endpoints":[{"type":"1","endpoint":"http://47.104.199.106"}]}`)
+	require.True(t, err == nil)
+
+	t.Log(fmt.Sprintf("%x", value))
+
+	listdstr := "00000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000f424a00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000000000451e5b29b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000dc7b226f70657261746f725f61646472657373223a226e6368316e716137753879797933396c79676d656e3070366d667233617338337870706c68716b723273222c226d6f6e696b6572223a2251e5b29b222c2277656273697465223a227777772e687a6e756f6465746563682e636f6d222c2264657461696c73223a227169736c616e64206f6666696369616c222c22657874656e73696f6e223a22222c22656e64706f696e7473223a5b7b2274797065223a2231222c22656e64706f696e74223a22687474703a2f2f34372e3130342e3139392e313036227d5d7d00000000"
+	listd, err := hexutil.Decode(listdstr)
+
+	values, err := UnpackValuesByABIFile("/Users/sun/Desktop/abi2", "ipals", listd)
+	require.True(t, err == nil)
+
+	for _, v := range values {
+		t.Log(fmt.Sprintf("%x", v))
+	}
+
+	s1, err := hexutil.Decode("51e5b29b")
+	s2, err := hexutil.Decode("7b226f70657261746f725f61646472657373223a226e6368316e716137753879797933396c79676d656e3070366d667233617338337870706c68716b723273222c226d6f6e696b6572223a2251e5b29b222c2277656273697465223a227777772e687a6e756f6465746563682e636f6d222c2264657461696c73223a227169736c616e64206f6666696369616c222c22657874656e73696f6e223a22222c22656e64706f696e7473223a5b7b2274797065223a2231222c22656e64706f696e74223a22687474703a2f2f34372e3130342e3139392e313036227d5d7d")
+	s3, err := hexutil.DecodeUint64("f424a")
+
+	t.Log(fmt.Sprintf("s1:%s\ns2:%s\ns3:%d", s1, s2, s3))
+
 }

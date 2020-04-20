@@ -82,6 +82,22 @@ func PubKeyHexString2AddressBech32(pubKeyStr string) (string, error) {
 	return addr.String(), nil
 }
 
+func PubKeyHexString2Address(pubKeyStr string) (addr types.AccAddress, err error) {
+	if len(pubKeyStr) == 0 {
+		return addr, fmt.Errorf("pubkey invalid")
+	}
+
+	pubkeyHex, err := hex.DecodeString(pubKeyStr)
+	if err != nil {
+		return addr, err
+	}
+
+	var pk secp256k1.PubKeySecp256k1
+	copy(pk[:], pubkeyHex)
+	addr = types.AccAddress(pk.Address().Bytes())
+	return
+}
+
 func PubKey2AddressBech32(pubKey crypto.PubKey) (string, error) {
 	return types.AccAddress(pubKey.Address().Bytes()).String(), nil
 }
