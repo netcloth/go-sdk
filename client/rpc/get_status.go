@@ -25,7 +25,6 @@ func (c *client) GetStatus() (ResultStatus, error) {
 	} else {
 		res.NodeInfo = status.NodeInfo
 		return res, nil
-
 	}
 }
 

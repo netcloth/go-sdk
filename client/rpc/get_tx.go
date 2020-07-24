@@ -27,11 +27,11 @@ func (c *client) GetTx(hash string) (ResultTx, error) {
 	)
 	txBytes, err := hex.DecodeString(hash)
 	if err != nil {
-		return res, nil
+		return res, err
 	}
 	txResult, err := c.rpc.Tx(txBytes, true)
 	if err != nil {
-		return res, nil
+		return res, err
 	}
 
 	res.Hash = txResult.Hash.String()
