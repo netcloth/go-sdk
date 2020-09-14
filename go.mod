@@ -19,7 +19,7 @@ require (
 	github.com/spf13/viper v1.6.1 // indirect
 	github.com/stretchr/testify v1.6.1
 	github.com/tendermint/crypto v0.0.0-20191022145703-50d29ede1e15 // indirect
-	github.com/tendermint/go-amino v0.15.1
+	github.com/tendermint/go-amino v0.16.0
 	github.com/tendermint/tendermint v0.32.9
 	golang.org/x/crypto v0.0.0-20191119213627-4f8c1d86b1ba
 	gopkg.in/yaml.v2 v2.2.7 // indirect
