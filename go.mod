@@ -14,14 +14,13 @@ require (
 	github.com/onsi/gomega v1.7.0 // indirect
 	github.com/parnurzeal/gorequest v0.2.16
 	github.com/pelletier/go-toml v1.6.0 // indirect
-	github.com/pkg/errors v0.9.0
+	github.com/pkg/errors v0.9.1
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/spf13/viper v1.6.1 // indirect
 	github.com/stretchr/testify v1.6.1
 	github.com/tendermint/crypto v0.0.0-20191022145703-50d29ede1e15 // indirect
 	github.com/tendermint/go-amino v0.15.1
-	github.com/tendermint/tendermint v0.32.9
-	golang.org/x/crypto v0.0.0-20191119213627-4f8c1d86b1ba
+	github.com/tendermint/tendermint v0.33.9
+	golang.org/x/crypto v0.0.0-20200406173513-056763e48d71
 	gopkg.in/yaml.v2 v2.2.7 // indirect
 	moul.io/http2curl v1.0.0 // indirect
 )
