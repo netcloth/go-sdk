@@ -21,7 +21,7 @@ require (
 	github.com/tendermint/crypto v0.0.0-20191022145703-50d29ede1e15 // indirect
 	github.com/tendermint/go-amino v0.15.1
 	github.com/tendermint/tendermint v0.32.9
-	golang.org/x/crypto v0.0.0-20191119213627-4f8c1d86b1ba
+	golang.org/x/crypto v0.1.0
 	gopkg.in/yaml.v2 v2.2.7 // indirect
 	moul.io/http2curl v1.0.0 // indirect
 )
